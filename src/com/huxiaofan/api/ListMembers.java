@@ -1,0 +1,113 @@
+package com.huxiaofan.api;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+
+
+import com.alibaba.fastjson.*;
+
+@WebServlet(name = "ListMembers")
+public class ListMembers extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        //允许跨域请求
+        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
+
+        //定义输出对象
+        Writer o = response.getWriter();
+        //result接口
+        ResultSet rs;
+        //新的数据工具类对象
+        dbUtils db = new dbUtils();
+        //创建stmt类
+        Statement stmt = db.getStatement();
+
+        if (request.getParameter("method").equals("delete")) {
+            String cno = request.getParameter("cno");
+            String d = "delete from members where cno = \"" + cno + "\"";
+            try {
+                if (stmt.executeUpdate(d) == 0){
+                    o.write("Fail，删除失败！");
+                    System.out.println("Fail，删除失败！" + d);
+                    response.setStatus(202);
+                }
+                System.out.println("OK，删除成功！" + cno);
+                System.out.println(d);
+                o.write("OK，删除成功！");
+            } catch (SQLException throwables) {
+                o.write("Fail，删除失败！");
+                System.out.println("Fail，删除失败！" + d);
+                throwables.printStackTrace();
+                response.setStatus(204);
+            }
+        }
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        //允许跨域请求
+        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
+
+
+        //定义输出对象
+        Writer o = response.getWriter();
+        //result接口
+        ResultSet rs;
+
+        dbUtils db = new dbUtils();
+        try {
+            Statement stmt = db.getStatement();
+            rs = stmt.executeQuery("SELECT * FROM members");
+
+            rs.beforeFirst();
+            //使用alibaba的fastjson建立一个json对象
+            JSONArray membersJson = new JSONArray();
+
+            while (rs.next()) {
+                //创建用户信息哈希表
+                HashMap<String, String> members = new HashMap<String, String>();
+                String cno = rs.getString(1);
+                String cname = rs.getString(2);
+                String csex = rs.getString(3);
+                String caddress = rs.getString(4);
+                String cregtime = rs.getString(5);
+                members.put("cno", cno);
+                members.put("cname", cname);
+                members.put("csex", csex);
+                members.put("caddress", caddress);
+                members.put("cregtime", cregtime);
+                //把hashmap对象添加到json数组中
+                membersJson.add(members);
+            }
+            //字符串输出json内容
+            o.write(membersJson.toJSONString());
+            //断开数据库连接
+            rs.close();
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+}
