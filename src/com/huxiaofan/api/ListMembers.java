@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-
-
 import com.alibaba.fastjson.*;
 
 @WebServlet(name = "ListMembers")
@@ -37,6 +35,7 @@ public class ListMembers extends HttpServlet {
         //创建stmt类
         Statement stmt = db.getStatement();
 
+        //如果参数中method为删除，则操作mysql删除数据
         if (request.getParameter("method").equals("delete")) {
             String cno = request.getParameter("cno");
             String d = "delete from members where cno = \"" + cno + "\"";
@@ -55,8 +54,36 @@ public class ListMembers extends HttpServlet {
                 throwables.printStackTrace();
                 response.setStatus(204);
             }
+        }else if (request.getParameter("method").equals("modify")) {
+            //从参数获取前端需要修改的学生ID
+            String cno = request.getParameter("row[cno]");
+            String cname = request.getParameter("row[cname]");
+            String caddress = request.getParameter("row[caddress]");
+            //因为前端来的数据形如 cregtime="1986-01-07T16:00:00.000Z"需要对其进行处理
+            String cregtime = request.getParameter("row[cregtime]").substring(0,16);
+            String csex = request.getParameter("row[csex]");
+
+            System.out.println(cno+" "+cname+" "+caddress+" "+cregtime+" "+csex);
+            //先做查询看是否存在
+            String m = "update members set cname=\"" + cname + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\" where cno=\"" + cno + "\"";
+            try {
+                System.out.println(m);
+                int count = stmt.executeUpdate(m);
+                if (count > 0) {
+                    o.write("修改成功，影响行数：" + count);
+                }
+                System.out.println("修改成功，影响行数：" + count);
+            } catch (SQLException throwables) {
+                o.write("Fail，修改失败！");
+                System.out.println("Fail，修改失败！" + m);
+                response.setStatus(204);
+                throwables.printStackTrace();
+            }
         }
 
+
+        //使用定义的工具类一键断开con和stmt连接
+        db.closeConnect();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -92,11 +119,13 @@ public class ListMembers extends HttpServlet {
                 String csex = rs.getString(3);
                 String caddress = rs.getString(4);
                 String cregtime = rs.getString(5);
+                String cmoney = rs.getString(6);
                 members.put("cno", cno);
                 members.put("cname", cname);
                 members.put("csex", csex);
                 members.put("caddress", caddress);
                 members.put("cregtime", cregtime);
+                members.put("cmoney", cmoney);
                 //把hashmap对象添加到json数组中
                 membersJson.add(members);
             }
