@@ -65,7 +65,7 @@ public class ListMembers extends HttpServlet {
 
             System.out.println(cno+" "+cname+" "+caddress+" "+cregtime+" "+csex);
             //先做查询看是否存在
-            String m = "update members set cname=\"" + cname + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\" where cno=\"" + cno + "\"";
+            String m = "update members set cname=\"" + cname + "\", csex=\"" + csex + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\" where cno=\"" + cno + "\"";
             try {
                 System.out.println(m);
                 int count = stmt.executeUpdate(m);
