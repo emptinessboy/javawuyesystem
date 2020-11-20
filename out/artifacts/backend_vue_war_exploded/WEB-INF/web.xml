@@ -11,4 +11,12 @@
         <servlet-name>ListMembers</servlet-name>
         <url-pattern>/api/listmembers</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AddMembers</servlet-name>
+        <servlet-class>com.huxiaofan.api.AddMembers</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddMembers</servlet-name>
+        <url-pattern>/api/addmembers</url-pattern>
+    </servlet-mapping>
 </web-app>

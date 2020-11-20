@@ -1,5 +1,5 @@
 package com.huxiaofan.api;
-
+//此类实现用户列表查询，用户信息更新和用户删除
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
