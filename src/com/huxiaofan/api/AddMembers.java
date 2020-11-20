@@ -44,8 +44,8 @@ public class AddMembers extends HttpServlet {
         String csex = request.getParameter("sex");
         String cmoney = request.getParameter("money");
         String caddress = request.getParameter("address");
-        String cregtime = request.getParameter("date").substring(0,19);
-
+        String cregtime = request.getParameter("date").substring(0, 19);
+        String cpass = request.getParameter("pass");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date d = null;
         try {
@@ -58,29 +58,37 @@ public class AddMembers extends HttpServlet {
         //System.out.println(d);
         //时间对象转字符串
         cregtime = sdf.format(d);
-        System.out.println(cno+cname+csex+cmoney+caddress+cregtime);
+        System.out.println(cno + " " + cname + " " + csex + " " + cmoney + " " + caddress + " " + cregtime + " " + cpass);
 
+        String a1 = "INSERT INTO members" +
+                "(cno,cname,csex,cmoney,caddress,cregtime)" +
+                "VALUES" +
+                "(\'" + cno + "\',\'" + cname + "\',\'" + csex + "\',\'" + cmoney + "\',\'" + caddress + "\',\'" + cregtime + "\')";
 
-//
-//
-//        String d = "delete from members where cno = \"" + cno + "\"";
-//        try {
-//            if (stmt.executeUpdate(d) == 0){
-//                o.write("Fail，删除失败！");
-//                System.out.println("Fail，删除失败！" + d);
-//                response.setStatus(202);
-//            }
-//            System.out.println("OK，删除成功！" + cno);
-//            System.out.println(d);
-//            o.write("OK，删除成功！");
-//        } catch (SQLException throwables) {
-//            o.write("Fail，删除失败！");
-//            System.out.println("Fail，删除失败！" + d);
-//            throwables.printStackTrace();
-//            response.setStatus(204);
-//        }
-
-
+        String a2 = "INSERT INTO mpass" +
+                "(cno,cpass)" +
+                "VALUES" +
+                "(\'" + cno + "\',\'" + cpass + "\')";
+        try {
+            if (stmt.executeUpdate(a1) == 0) {
+                o.write("Fail，插入失败！");
+                System.out.println("Fail，插入用户信息失败！" + a1);
+                response.setStatus(202);
+            } else if (stmt.executeUpdate(a2) == 0) {
+                o.write("Fail，插入失败！");
+                System.out.println("Fail，插入用户名密码失败！" + a1);
+                response.setStatus(202);
+            } else {
+                System.out.println("OK，新增成功！" + cno);
+                System.out.println(a1 + " " + a2);
+                o.write("OK，新增成功！");
+            }
+        } catch (SQLException throwables) {
+            o.write("Fail，插入失败！");
+            System.out.println("Fail，插入用户名密码失败！" + a1 + " & " + a2);
+            throwables.printStackTrace();
+            response.setStatus(204);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -117,7 +125,7 @@ public class AddMembers extends HttpServlet {
             maxid++;
 
             HashMap<String, String> newid = new HashMap<String, String>();
-            newid.put("newid",maxid.toString());
+            newid.put("newid", maxid.toString());
             //使用alibaba的fastjson建立一个json对象
             JSONArray newidJson = new JSONArray();
             newidJson.add(newid);

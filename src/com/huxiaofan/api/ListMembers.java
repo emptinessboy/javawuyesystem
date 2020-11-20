@@ -49,10 +49,11 @@ public class ListMembers extends HttpServlet {
                     o.write("Fail，删除失败！");
                     System.out.println("Fail，删除失败！" + d);
                     response.setStatus(202);
+                }else {
+                    System.out.println("OK，删除成功！" + cno);
+                    System.out.println(d);
+                    o.write("OK，删除成功！");
                 }
-                System.out.println("OK，删除成功！" + cno);
-                System.out.println(d);
-                o.write("OK，删除成功！");
             } catch (SQLException throwables) {
                 o.write("Fail，删除失败！");
                 System.out.println("Fail，删除失败！" + d);
