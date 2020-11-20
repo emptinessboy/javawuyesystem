@@ -19,4 +19,12 @@
         <servlet-name>AddMembers</servlet-name>
         <url-pattern>/api/addmembers</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ServiceManage</servlet-name>
+        <servlet-class>com.huxiaofan.api.ServiceManage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServiceManage</servlet-name>
+        <url-pattern>/api/servicemanage</url-pattern>
+    </servlet-mapping>
 </web-app>
