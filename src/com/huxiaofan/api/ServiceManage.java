@@ -89,31 +89,65 @@ public class ServiceManage extends HttpServlet {
         dbUtils db = new dbUtils();
         //创建stmt类
         Statement stmt = db.getStatement();
-
+        String want = request.getParameter("want");
         try {
-            rs = stmt.executeQuery("SELECT sid FROM service");
-            rs.beforeFirst();
-            Long maxid = 0L;
-            while (rs.next()) {
-                String sid = rs.getString(1);
-                if (maxid < Long.parseLong(sid)) {
-                    maxid = Long.parseLong(sid);
+            if (want == null) {
+                o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
+            } else if (want.equals("sid")) {
+                rs = stmt.executeQuery("SELECT sid FROM service");
+                rs.beforeFirst();
+                Long maxid = 0L;
+                while (rs.next()) {
+                    String sid = rs.getString(1);
+                    if (maxid < Long.parseLong(sid)) {
+                        maxid = Long.parseLong(sid);
+                    }
                 }
-            }
-            maxid++;
+                maxid++;
 
-            HashMap<String, String> newid = new HashMap<String, String>();
-            newid.put("newid", maxid.toString());
-            //使用alibaba的fastjson建立一个json对象
-            JSONArray newidJson = new JSONArray();
-            newidJson.add(newid);
-            //输出json
-            o.write(newidJson.toJSONString());
-            //断开数据库连接
-            rs.close();
+                HashMap<String, String> newid = new HashMap<String, String>();
+                newid.put("newid", maxid.toString());
+                //使用alibaba的fastjson建立一个json对象
+                JSONArray newidJson = new JSONArray();
+                newidJson.add(newid);
+                //输出json
+                o.write(newidJson.toJSONString());
+                //断开数据库连接
+                rs.close();
+            } else if (want.equals("slist")) {
+                rs = stmt.executeQuery("SELECT * FROM service");
+                rs.beforeFirst();
+
+                //使用alibaba的fastjson建立一个json对象
+                JSONArray serviceJson = new JSONArray();
+                while (rs.next()) {
+                    //创建服务列表信息哈希表
+                    HashMap<String, String> serviceList = new HashMap<String, String>();
+
+                    String sid = rs.getString(1);
+                    String sname = rs.getString(2);
+                    String sprice = rs.getString(3);
+                    String sdesc = rs.getString(4);
+                    String stime = rs.getString(5);
+
+                    serviceList.put("sid", sid);
+                    serviceList.put("sname", sname);
+                    serviceList.put("sprice", sprice);
+                    serviceList.put("sdesc", sdesc);
+                    serviceList.put("stime", stime);
+
+                    //把hashmap对象添加到json数组中
+                    serviceJson.add(serviceList);
+                }
+                //输出json
+                o.write(serviceJson.toJSONString());
+                //断开数据库连接
+                rs.close();
+
+            }
             //使用定义的工具类一键断开con和stmt连接
             db.closeConnect();
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
         }
     }
