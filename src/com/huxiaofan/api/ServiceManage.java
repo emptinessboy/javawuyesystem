@@ -35,12 +35,38 @@ public class ServiceManage extends HttpServlet {
         //创建stmt类
         Statement stmt = db.getStatement();
 
+        String method = request.getParameter("method");
         String sid = request.getParameter("id");
         String sname = request.getParameter("name");
         String sprice = request.getParameter("price");
         String sdesc = request.getParameter("desc");
-        String stime = request.getParameter("time");
+        String stime = String.valueOf(0);
         System.out.println(sid + " " + sname + " " + sprice + " " + sdesc + " " + stime);
+
+        if (method.equals("delete")) {
+        } else {
+            String s = "INSERT INTO service" +
+                    "(sid,sname,sprice,sdesc,stime)" +
+                    "VALUES" +
+                    "(\'" + sid + "\',\'" + sname + "\',\'" + sprice + "\',\'" + sdesc + "\',\'" + stime + "\')";
+            try {
+                if (stmt.executeUpdate(s) == 0) {
+                    o.write("Fail，插入失败！");
+                    System.out.println("Fail，插入用户信息失败！" + s);
+                    response.setStatus(202);
+                } else {
+                    System.out.println("OK，新增成功！" + sid);
+                    System.out.println(s + " " + s);
+                    o.write("OK，新增成功！");
+                }
+            } catch (SQLException throwables) {
+                o.write("Fail，插入失败！");
+                System.out.println("Fail，插入失败！" + s);
+                throwables.printStackTrace();
+                response.setStatus(204);
+            }
+        }
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
