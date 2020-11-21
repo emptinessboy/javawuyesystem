@@ -27,4 +27,12 @@
         <servlet-name>ServiceManage</servlet-name>
         <url-pattern>/api/servicemanage</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MoneyApi</servlet-name>
+        <servlet-class>com.huxiaofan.api.MoneyApi</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MoneyApi</servlet-name>
+        <url-pattern>/api/moneyapi</url-pattern>
+    </servlet-mapping>
 </web-app>

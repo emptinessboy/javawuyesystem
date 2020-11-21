@@ -22,14 +22,9 @@ import com.alibaba.fastjson.*;
 public class ListMembers extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        //允许跨域请求
-        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
+        //此api用于删除和修改用户
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
 
         //定义输出对象
         Writer o = response.getWriter();
@@ -110,15 +105,9 @@ public class ListMembers extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        //允许跨域请求
-        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
-
+        //此接口返回用户列表
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
 
         //定义输出对象
         Writer o = response.getWriter();

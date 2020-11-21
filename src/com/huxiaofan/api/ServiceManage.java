@@ -18,14 +18,9 @@ import java.util.HashMap;
 public class ServiceManage extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        //允许跨域请求
-        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
+        //此方法用来添加和删除服务
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
         //定义输出对象
         Writer o = response.getWriter();
         //result接口
@@ -44,7 +39,7 @@ public class ServiceManage extends HttpServlet {
         System.out.println(method + " " + sid + " " + sname + " " + sprice + " " + sdesc + " " + stime);
 
         if (method.equals("delete")) {
-            //此段代码怕毛短参数中 method 若为 delete，则删除对应服务项目
+            //此段代码判断参数中 method 若为 delete，则删除对应服务项目
             String d = "delete from service where sid = \"" + sid + "\"";
             System.out.println(d);
             try {
@@ -98,18 +93,11 @@ public class ServiceManage extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //这个方法就可以返回一个新的用户ID(大于目前任何已有的用户ID)
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        //允许跨域请求
-        response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg");
+        //此接口用于新生成服务ID和查看服务列表
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
 
         Writer o = response.getWriter();
-
 
         //result接口
         ResultSet rs;
