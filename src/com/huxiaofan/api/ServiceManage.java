@@ -36,7 +36,7 @@ public class ServiceManage extends HttpServlet {
         Statement stmt = db.getStatement();
 
         String method = request.getParameter("method");
-        String sid = request.getParameter("id");
+        String sid = request.getParameter("sid");
         String sname = request.getParameter("name");
         String sprice = request.getParameter("price");
         String sdesc = request.getParameter("desc");
@@ -46,6 +46,7 @@ public class ServiceManage extends HttpServlet {
         if (method.equals("delete")) {
             //此段代码怕毛短参数中 method 若为 delete，则删除对应服务项目
             String d = "delete from service where sid = \"" + sid + "\"";
+            System.out.println(d);
             try {
                 if (stmt.executeUpdate(d) == 0) {
                     o.write("Fail，删除失败！");
@@ -61,6 +62,10 @@ public class ServiceManage extends HttpServlet {
                 System.out.println("Fail，删除失败！" + d);
                 throwables.printStackTrace();
                 response.setStatus(204);
+            }finally {
+                System.out.println("删除物业服务成功");
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
             }
         } else {
             //反之则添加服务
@@ -75,7 +80,7 @@ public class ServiceManage extends HttpServlet {
                     response.setStatus(202);
                 } else {
                     System.out.println("OK，新增成功！" + sid);
-                    System.out.println(s + " " + s);
+                    System.out.println(s);
                     o.write("OK，新增成功！");
                 }
             } catch (SQLException throwables) {
@@ -83,6 +88,10 @@ public class ServiceManage extends HttpServlet {
                 System.out.println("Fail，插入失败！" + s);
                 throwables.printStackTrace();
                 response.setStatus(204);
+            }finally {
+                System.out.println("新增物业服务成功");
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
             }
         }
 
@@ -133,6 +142,7 @@ public class ServiceManage extends HttpServlet {
                 o.write(newidJson.toJSONString());
                 //断开数据库连接
                 rs.close();
+                System.out.println("输出新物业服务ID成功");
             } else if (want.equals("slist")) {
                 rs = stmt.executeQuery("SELECT * FROM service");
                 rs.beforeFirst();
@@ -162,12 +172,14 @@ public class ServiceManage extends HttpServlet {
                 o.write(serviceJson.toJSONString());
                 //断开数据库连接
                 rs.close();
-
+                System.out.println("输出物业服务列表成功");
             }
-            //使用定义的工具类一键断开con和stmt连接
-            db.closeConnect();
+
         } catch (Exception throwables) {
             throwables.printStackTrace();
+        } finally {
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
         }
     }
 }

@@ -88,6 +88,9 @@ public class AddMembers extends HttpServlet {
             System.out.println("Fail，插入用户名密码失败！" + a1 + " & " + a2);
             throwables.printStackTrace();
             response.setStatus(204);
+        } finally {
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
         }
     }
 
@@ -133,10 +136,11 @@ public class AddMembers extends HttpServlet {
             o.write(newidJson.toJSONString());
             //断开数据库连接
             rs.close();
-            //使用定义的工具类一键断开con和stmt连接
-            db.closeConnect();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
         }
 
     }

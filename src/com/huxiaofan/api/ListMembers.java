@@ -49,7 +49,7 @@ public class ListMembers extends HttpServlet {
                     o.write("Fail，删除失败！");
                     System.out.println("Fail，删除失败！" + d);
                     response.setStatus(202);
-                }else {
+                } else {
                     System.out.println("OK，删除成功！" + cno);
                     System.out.println(d);
                     o.write("OK，删除成功！");
@@ -59,6 +59,9 @@ public class ListMembers extends HttpServlet {
                 System.out.println("Fail，删除失败！" + d);
                 throwables.printStackTrace();
                 response.setStatus(204);
+            } finally {
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
             }
         } else if (request.getParameter("method").equals("modify")) {
             //从参数获取前端需要修改的学生ID
@@ -96,11 +99,14 @@ public class ListMembers extends HttpServlet {
                 System.out.println("Fail，修改失败！");
                 response.setStatus(204);
                 throwables.printStackTrace();
+            } finally {
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
             }
         }
 
         //使用定义的工具类一键断开con和stmt连接
-        db.closeConnect();
+        //db.closeConnect();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -151,9 +157,12 @@ public class ListMembers extends HttpServlet {
             //断开数据库连接
             rs.close();
             //使用定义的工具类一键断开con和stmt连接
-            db.closeConnect();
+            //db.closeConnect();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
         }
     }
 }
