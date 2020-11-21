@@ -41,10 +41,29 @@ public class ServiceManage extends HttpServlet {
         String sprice = request.getParameter("price");
         String sdesc = request.getParameter("desc");
         String stime = String.valueOf(0);
-        System.out.println(sid + " " + sname + " " + sprice + " " + sdesc + " " + stime);
+        System.out.println(method + " " + sid + " " + sname + " " + sprice + " " + sdesc + " " + stime);
 
         if (method.equals("delete")) {
+            //此段代码怕毛短参数中 method 若为 delete，则删除对应服务项目
+            String d = "delete from service where sid = \"" + sid + "\"";
+            try {
+                if (stmt.executeUpdate(d) == 0) {
+                    o.write("Fail，删除失败！");
+                    System.out.println("Fail，删除失败！" + d);
+                    response.setStatus(202);
+                } else {
+                    System.out.println("OK，删除成功！" + sid);
+                    System.out.println(d);
+                    o.write("OK，删除成功！");
+                }
+            } catch (SQLException throwables) {
+                o.write("Fail，删除失败！");
+                System.out.println("Fail，删除失败！" + d);
+                throwables.printStackTrace();
+                response.setStatus(204);
+            }
         } else {
+            //反之则添加服务
             String s = "INSERT INTO service" +
                     "(sid,sname,sprice,sdesc,stime)" +
                     "VALUES" +
