@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,10 +23,30 @@ public class MoneyApi extends HttpServlet {
         //定义输出对象
         Writer o = response.getWriter();
 
-        //新的数据工具类对象
-        dbUtils db = new dbUtils();
+        //需要用到事务查询，就不使用之前的工具类了
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            con = MySql.getConnection();
+            System.out.println("Statement建立成功");
+            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        //因为涉及“钱”的操作
+        //事务默认就是自动提交的。 需要开启事务，关闭自动提交。
+        try {
+            con.setAutoCommit(false);
+            System.out.println("MoneyAPI关闭自动提交成功");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
         //创建stmt类
-        Statement stmt = db.getStatement();
+//        Statement stmt = db.getStatement();
 
         String method = request.getParameter("method");
         String cno = request.getParameter("uid");
@@ -49,29 +70,7 @@ public class MoneyApi extends HttpServlet {
         System.out.println(method + " " + cno + " " + sid + " " + date + " " + times + " " + staff);
 
         if (method.equals("delete")) {
-//            //此段代码判断参数中 method 若为 delete，则删除对应服务项目
-////            String d = "delete from service where sid = \"" + sid + "\"";
-////            System.out.println(d);
-////            try {
-////                if (stmt.executeUpdate(d) == 0) {
-////                    o.write("Fail，删除失败！");
-////                    System.out.println("Fail，删除失败！" + d);
-////                    response.setStatus(202);
-////                } else {
-////                    System.out.println("OK，删除成功！" + sid);
-////                    System.out.println(d);
-////                    o.write("OK，删除成功！");
-////                }
-////            } catch (SQLException throwables) {
-////                o.write("Fail，删除失败！");
-////                System.out.println("Fail，删除失败！" + d);
-////                throwables.printStackTrace();
-////                response.setStatus(204);
-////            }finally {
-////                System.out.println("删除物业服务成功");
-////                //使用定义的工具类一键断开con和stmt连接
-////                db.closeConnect();
-////            }
+            //
         } else if (method.equals("pay")) {
 
             //增加物业服务次数记录
@@ -98,6 +97,7 @@ public class MoneyApi extends HttpServlet {
                 String rid = null;
                 Double umoney = Double.valueOf(0);
                 Double smoney = Double.valueOf(0);
+
                 rs = stmt.executeQuery(f);
                 while (rs.next()) {
                     rid = rs.getString(1);
@@ -115,9 +115,13 @@ public class MoneyApi extends HttpServlet {
                 rs.close();
                 System.out.println("用户余额：" + umoney + " 服务金额：" + smoney);
 
+                //计算服务总金额 = 金额*次数
+                smoney = Double.parseDouble(times) * smoney;
+                System.out.println("smoney："+smoney);
+
                 //p = pay
                 Double cmoney = umoney - smoney;
-                String p = "update members set cmoney=cmoney-" + cmoney + " where cno = " + cno;
+                String p = "update members set cmoney=" + cmoney + " where cno = " + cno;
 
                 if (rid == null) {
                     o.write("Fail，用户ID不存在！");
@@ -125,11 +129,11 @@ public class MoneyApi extends HttpServlet {
                     response.setStatus(205);
                 } else if (umoney < smoney) {
                     o.write("Fail，用户余额不足！");
-                    System.out.println("Fail，用户余额不足！" + f);
+                    System.out.println("Fail，用户余额不足！");
                     response.setStatus(206);
                 } else if (stmt.executeUpdate(p) == 0) {
                     o.write("Fail，用户扣款失败！");
-                    System.out.println("Fail，用户扣款失败！" + a);
+                    System.out.println("Fail，用户扣款失败！" + p);
                     response.setStatus(207);
                 } else if (stmt.executeUpdate(a) == 0) {
                     o.write("Fail，修改服务次数失败！");
@@ -140,19 +144,32 @@ public class MoneyApi extends HttpServlet {
                     System.out.println("Fail，插入用户名密码失败！" + m);
                     response.setStatus(202);
                 } else {
+                    //没问题的话才提交数据库查询
+                    con.commit();
                     System.out.println("OK，新增物业费记录成功！" + sid);
                     System.out.println(a);
                     o.write("OK，新增物业费记录成功！");
                 }
             } catch (SQLException throwables) {
+                try {
+                    con.rollback();
+                    System.out.println("遇到异常，回滚数据库成功");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 o.write("Fail，插入失败！");
                 System.out.println("Fail，插入物业费记录失败！");
                 throwables.printStackTrace();
                 response.setStatus(204);
             } finally {
-                System.out.println("新增物业费记录成功");
                 //使用定义的工具类一键断开con和stmt连接
-                db.closeConnect();
+                try {
+                    stmt.close();
+                    con.close();
+                    System.out.println("断开事务的mysql连接成功");
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         }
 
