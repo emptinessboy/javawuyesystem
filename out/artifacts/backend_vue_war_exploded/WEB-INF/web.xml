@@ -51,4 +51,13 @@
         <servlet-name>LoginApi</servlet-name>
         <url-pattern>/api/login</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>testSession</servlet-name>
+        <servlet-class>com.huxiaofan.api.testSession</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>testSession</servlet-name>
+        <url-pattern>/testsession</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
 
 
 import static com.huxiaofan.api.md5Utils.newMD5;
@@ -74,9 +75,14 @@ public class LoginApi extends HttpServlet {
                         String token = newMD5(String.valueOf(sec));
                         System.out.println("随机token生成完毕： "+token);
 
-                        hs.setAttribute(token,eid);
-                        hs.setAttribute(token,ename);
-                        hs.setAttribute(token,isadmin);
+                        HashMap<String, String> value = new HashMap<String, String>();
+                        value.put("eid",eid);
+                        value.put("ename",ename);
+                        value.put("isadmin",isadmin);
+
+                        hs.setAttribute(token,value);
+//                        hs.setAttribute(token,ename);
+//                        hs.setAttribute(token,isadmin);
 
                         o.write("认证成功");
 
