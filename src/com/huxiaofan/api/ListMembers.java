@@ -147,6 +147,7 @@ public class ListMembers extends HttpServlet {
             rs.close();
             //使用定义的工具类一键断开con和stmt连接
             //db.closeConnect();
+            System.out.println("获取用户列表成功");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

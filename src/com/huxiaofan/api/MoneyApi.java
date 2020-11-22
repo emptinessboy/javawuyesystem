@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,40 +51,50 @@ public class MoneyApi extends HttpServlet {
 
         if (method.equals("income")) {
             //用来充值物业费
-//            String id = request.getParameter("id");
-//            String rm = "delete from record where id = \"" + id + "\"";
-//            try {
-//                if (stmt.executeUpdate(rm) == 0) {
-//                    o.write("Fail，删除失败！");
-//                    System.out.println("Fail，删除失败！" + rm);
-//                    response.setStatus(202);
-//                } else {
-//                    con.commit();
-//                    System.out.println("OK，删除成功！" + rm);
-//                    System.out.println(rm);
-//                    o.write("OK，删除成功！");
-//                }
-//            } catch (SQLException throwables) {
-//                try {
-//                    con.rollback();
-//                    System.out.println("遇到异常，回滚数据库成功");
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//                o.write("Fail，删除失败！");
-//                System.out.println("Fail，删除失败！" + rm);
-//                throwables.printStackTrace();
-//                response.setStatus(204);
-//            } finally {
-//                //使用定义的工具类一键断开con和stmt连接
-//                try {
-//                    stmt.close();
-//                    con.close();
-//                    System.out.println("断开事务的mysql连接成功");
-//                } catch (SQLException throwables) {
-//                    throwables.printStackTrace();
-//                }
-//            }
+            String id = request.getParameter("id");
+            String money = request.getParameter("money");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            String d = dateFormat.format(date);
+            System.out.println(id + " " + money + " " + d);
+            String income = "update members set cmoney=cmoney+\"" + money + "\" where cno=\"" + id + "\"";
+            System.out.println(income);
+            String record = "INSERT INTO record" +
+                    "(method,cno,date,times,money)" +
+                    "VALUES" +
+                    "(\'" + method + "\',\'" + id + "\',\'" + d + "\',\'" + "1" + "\',\'"  + money + "\')";
+            System.out.println(record);
+            try {
+                if (stmt.executeUpdate(income) == 0 || stmt.executeUpdate(record) == 0) {
+                    o.write("Fail，充值失败！");
+                    System.out.println("Fail，充值失败！");
+                    response.setStatus(202);
+                } else {
+                    con.commit();
+                    System.out.println("OK，充值成功！");
+                    o.write("OK，充值成功！");
+                }
+            } catch (SQLException throwables) {
+                try {
+                    con.rollback();
+                    System.out.println("遇到异常，回滚数据库成功");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                o.write("Fail，充值失败！");
+                System.out.println("Fail，充值失败！");
+                throwables.printStackTrace();
+                response.setStatus(204);
+            } finally {
+                //使用定义的工具类一键断开con和stmt连接
+                try {
+                    stmt.close();
+                    con.close();
+                    System.out.println("断开事务的mysql连接成功");
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         } else if (method.equals("delete")) {
             //用来删除物业费记录
             String id = request.getParameter("id");
