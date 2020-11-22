@@ -290,14 +290,22 @@ public class MoneyApi extends HttpServlet {
                 records.put("id", id);
                 records.put("date", date);
                 records.put("cno", cno);
-                records.put("sid", sid);
+                if (sid == null){
+                    records.put("sid", "-");
+                }else {
+                    records.put("sid", sid);
+                }
                 if (method.equals("pay")) {
                     records.put("method", "服务消费");
                 } else {
                     records.put("method", "物业费充值");
                 }
                 records.put("times", times);
-                records.put("staff", staff);
+                if (staff == null){
+                    records.put("staff", "-");
+                }else {
+                    records.put("staff", staff);
+                }
                 records.put("money", money);
                 //把hashmap对象添加到json数组中
                 recordsJson.add(records);
