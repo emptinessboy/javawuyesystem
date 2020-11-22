@@ -39,8 +39,12 @@ public class ServiceManage extends HttpServlet {
         System.out.println(method + " " + sid + " " + sname + " " + sprice + " " + sdesc + " " + stime);
 
         if (method.equals("delete")) {
-            //此段代码判断参数中 method 若为 delete，则删除对应服务项目
-            String d = "delete from service where sid = \"" + sid + "\"";
+
+            //这里使用了leftjoin多表联合查询进行删除;
+            String d = "delete service,record from service " +
+                    "LEFT JOIN record ON service.sid=record.sid " +
+                    "where service.sid = \"" + sid + "\"";
+
             System.out.println(d);
             try {
                 if (stmt.executeUpdate(d) == 0) {
