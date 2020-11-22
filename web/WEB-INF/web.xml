@@ -35,4 +35,12 @@
         <servlet-name>MoneyApi</servlet-name>
         <url-pattern>/api/moneyapi</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>StaffManage</servlet-name>
+        <servlet-class>com.huxiaofan.api.StaffMnage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffManage</servlet-name>
+        <url-pattern>/api/staff</url-pattern>
+    </servlet-mapping>
 </web-app>
