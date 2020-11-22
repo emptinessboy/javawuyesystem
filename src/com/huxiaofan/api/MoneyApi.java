@@ -88,12 +88,6 @@ public class MoneyApi extends HttpServlet {
             //m = modify
             String m = "update service set stime=stime+1 where sid = " + sid;
 
-            //添加物业费记录
-            //a = add
-            String a = "INSERT INTO record" +
-                    "(method,cno,sid,date,times,staff)" +
-                    "VALUES" +
-                    "(\'" + method + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\')";
             //result接口
             ResultSet rs;
             try {
@@ -120,11 +114,19 @@ public class MoneyApi extends HttpServlet {
 
                 //计算服务总金额 = 金额*次数
                 smoney = Double.parseDouble(times) * smoney;
-                System.out.println("smoney："+smoney);
+                System.out.println("smoney：" + smoney);
 
                 //p = pay
                 Double cmoney = umoney - smoney;
                 String p = "update members set cmoney=" + cmoney + " where cno = " + cno;
+
+                //添加物业费记录
+                //a = add
+                String a = "INSERT INTO record" +
+                        "(method,cno,sid,date,times,staff,money)" +
+                        "VALUES" +
+                        "(\'" + method + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\',\'" + smoney + "\')";
+
 
                 if (rid == null) {
                     o.write("Fail，用户ID不存在！");
@@ -181,7 +183,7 @@ public class MoneyApi extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //此接口返回物业费记录列表
         //封装的http请求响应头
-        httpUtils.httpUtil(request,response);
+        httpUtils.httpUtil(request, response);
 
         //定义输出对象
         Writer o = response.getWriter();
@@ -200,24 +202,26 @@ public class MoneyApi extends HttpServlet {
             while (rs.next()) {
                 //创建用户信息哈希表
                 HashMap<String, String> records = new HashMap<String, String>();
-                String id = rs.getString(7);
-                String date = rs.getString(1);
-                String cno = rs.getString(2);
-                String sid = rs.getString(3);
-                String method = rs.getString(4);
-                String times = rs.getString(5);
-                String staff = rs.getString(6);
+                String id = rs.getString(1);
+                String date = rs.getString(2);
+                String cno = rs.getString(3);
+                String sid = rs.getString(4);
+                String method = rs.getString(5);
+                String times = rs.getString(6);
+                String staff = rs.getString(7);
+                String money = rs.getString(8);
                 records.put("id", id);
                 records.put("date", date);
                 records.put("cno", cno);
                 records.put("sid", sid);
-                if (method.equals("pay")){
+                if (method.equals("pay")) {
                     records.put("method", "服务消费");
-                }else {
+                } else {
                     records.put("method", "物业费充值");
                 }
                 records.put("times", times);
                 records.put("staff", staff);
+                records.put("money", money);
                 //把hashmap对象添加到json数组中
                 recordsJson.add(records);
             }
