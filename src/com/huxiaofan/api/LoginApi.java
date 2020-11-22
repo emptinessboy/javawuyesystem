@@ -1,7 +1,5 @@
 package com.huxiaofan.api;
 
-import com.mysql.cj.Session;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +11,10 @@ import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Random;
+import java.util.Date;
+
+
+import static com.huxiaofan.api.md5Utils.newMD5;
 
 @WebServlet(name = "LoginApi")
 public class LoginApi extends HttpServlet {
@@ -29,7 +30,6 @@ public class LoginApi extends HttpServlet {
         //创建stmt类
         Statement stmt = db.getStatement();
 
-        Random r = new Random();
 
         String type = request.getParameter("type");
         String u = request.getParameter("user");
@@ -63,7 +63,20 @@ public class LoginApi extends HttpServlet {
                         //获取session
                         HttpSession hs = request.getSession(true);
 
-                        hs.setAttribute("","");
+
+                        //md5加时间戳生成一个随机token
+                        Date d = new Date();
+                        double rd = Math.random();
+
+                        String sec = String.valueOf(rd) + d.getTime();
+
+                        //System.out.println(sec);
+                        String token = newMD5(String.valueOf(sec));
+                        System.out.println("随机token生成完毕： "+token);
+
+                        hs.setAttribute(token,eid);
+                        hs.setAttribute(token,ename);
+                        hs.setAttribute(token,isadmin);
 
                         o.write("认证成功");
 
@@ -76,6 +89,7 @@ public class LoginApi extends HttpServlet {
                 }
 
                 rs.close();
+                db.closeConnect();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
