@@ -72,13 +72,17 @@ public class StaffMnage extends HttpServlet {
                     String ename = rs.getString(2);
                     String esex = rs.getString(3);
                     String esrore = rs.getString(4);
-                    String isadmin = rs.getString(5);
 
                     staffList.put("eid", eid);
                     staffList.put("ename", ename);
                     staffList.put("esex", esex);
                     staffList.put("esrore", esrore);
-                    staffList.put("isadmin", isadmin);
+                    int isadmin = rs.getInt(6);
+                    if (isadmin>0){
+                        staffList.put("isadmin", "管理员");
+                    }else {
+                        staffList.put("isadmin", "普通员工");
+                    }
 
                     //把hashmap对象添加到json数组中
                     staffJson.add(staffList);
