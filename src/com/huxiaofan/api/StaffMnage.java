@@ -58,36 +58,36 @@ public class StaffMnage extends HttpServlet {
                 //断开数据库连接
                 rs.close();
                 System.out.println("输出新员工ID成功");
-            } else if (want.equals("slist")) {
-//                rs = stmt.executeQuery("SELECT * FROM service");
-//                rs.beforeFirst();
-//
-//                //使用alibaba的fastjson建立一个json对象
-//                JSONArray serviceJson = new JSONArray();
-//                while (rs.next()) {
-//                    //创建服务列表信息哈希表
-//                    HashMap<String, String> serviceList = new HashMap<String, String>();
-//
-//                    String sid = rs.getString(1);
-//                    String sname = rs.getString(2);
-//                    String sprice = rs.getString(3);
-//                    String sdesc = rs.getString(4);
-//                    String stime = rs.getString(5);
-//
-//                    serviceList.put("sid", sid);
-//                    serviceList.put("sname", sname);
-//                    serviceList.put("sprice", sprice);
-//                    serviceList.put("sdesc", sdesc);
-//                    serviceList.put("stime", stime);
-//
-//                    //把hashmap对象添加到json数组中
-//                    serviceJson.add(serviceList);
-//                }
-//                //输出json
-//                o.write(serviceJson.toJSONString());
-//                //断开数据库连接
-//                rs.close();
-//                System.out.println("输出物业服务列表成功");
+            } else if (want.equals("elist")) {
+                rs = stmt.executeQuery("SELECT * FROM staff");
+                rs.beforeFirst();
+
+                //使用alibaba的fastjson建立一个json对象
+                JSONArray staffJson = new JSONArray();
+                while (rs.next()) {
+                    //创建服务列表信息哈希表
+                    HashMap<String, String> staffList = new HashMap<String, String>();
+
+                    String eid = rs.getString(1);
+                    String ename = rs.getString(2);
+                    String esex = rs.getString(3);
+                    String esrore = rs.getString(4);
+                    String isadmin = rs.getString(5);
+
+                    staffList.put("eid", eid);
+                    staffList.put("ename", ename);
+                    staffList.put("esex", esex);
+                    staffList.put("esrore", esrore);
+                    staffList.put("isadmin", isadmin);
+
+                    //把hashmap对象添加到json数组中
+                    staffJson.add(staffList);
+                }
+                //输出json
+                o.write(staffJson.toJSONString());
+                //断开数据库连接
+                rs.close();
+                System.out.println("输出员工列表成功");
             }
 
         } catch (Exception throwables) {
