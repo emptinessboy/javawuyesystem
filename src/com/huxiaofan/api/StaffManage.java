@@ -14,8 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-@WebServlet(name = "StaffMnage")
-public class StaffMnage extends HttpServlet {
+@WebServlet(name = "StaffManage")
+public class StaffManage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //此方法用来添加和删除服务
         //封装的http请求响应头
@@ -35,7 +35,13 @@ public class StaffMnage extends HttpServlet {
         if (method.equals("delete")) {
 
             //此段代码判断参数中 method 若为 delete，则删除对应服务项目
-            String d = "delete from staff where eid = \"" + eid + "\"";
+            // String d = "delete from staff where eid = \"" + eid + "\"";
+
+            //这里使用了leftjoin多表联合查询进行删除;
+            String d = "delete staff,record from staff " +
+                    "LEFT JOIN record ON staff.eid=record.staff " +
+                    "where staff.eid = \"" + eid + "\"";
+
             System.out.println(d);
             try {
                 if (stmt.executeUpdate(d) == 0) {

@@ -37,7 +37,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>StaffManage</servlet-name>
-        <servlet-class>com.huxiaofan.api.StaffMnage</servlet-class>
+        <servlet-class>com.huxiaofan.api.StaffManage</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffManage</servlet-name>
