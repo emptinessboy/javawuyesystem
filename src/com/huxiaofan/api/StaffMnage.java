@@ -19,7 +19,7 @@ public class StaffMnage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //此方法用来添加和删除服务
         //封装的http请求响应头
-        httpUtils.httpUtil(request,response);
+        httpUtils.httpUtil(request, response);
         //定义输出对象
         Writer o = response.getWriter();
         //result接口
@@ -52,7 +52,7 @@ public class StaffMnage extends HttpServlet {
                 System.out.println("Fail，删除员工失败！");
                 throwables.printStackTrace();
                 response.setStatus(204);
-            }finally {
+            } finally {
                 System.out.println("删除员工成功");
                 //使用定义的工具类一键断开con和stmt连接
                 db.closeConnect();
@@ -64,7 +64,7 @@ public class StaffMnage extends HttpServlet {
             String epass = request.getParameter("pass");
             String admin = request.getParameter("isadmin");
             int isadmin = 0;
-            if (admin.equals("true")){
+            if (admin.equals("true")) {
                 isadmin = 1;
             }
             System.out.println(method + " " + eid + " " + ename + " " + esex + " " + epass + " " + isadmin);
@@ -89,7 +89,7 @@ public class StaffMnage extends HttpServlet {
                 System.out.println("Fail，插入失败！");
                 throwables.printStackTrace();
                 response.setStatus(204);
-            }finally {
+            } finally {
                 System.out.println("新增员工成功");
                 //使用定义的工具类一键断开con和stmt连接
                 db.closeConnect();
@@ -156,11 +156,40 @@ public class StaffMnage extends HttpServlet {
                     staffList.put("esex", esex);
                     staffList.put("esrore", esrore);
                     int isadmin = rs.getInt(6);
-                    if (isadmin>0){
+                    if (isadmin > 0) {
                         staffList.put("isadmin", "管理员");
-                    }else {
+                    } else {
                         staffList.put("isadmin", "普通员工");
                     }
+
+                    //把hashmap对象添加到json数组中
+                    staffJson.add(staffList);
+                }
+
+                //输出json
+                o.write(staffJson.toJSONString());
+                //断开数据库连接
+                rs.close();
+                System.out.println("输出员工列表成功");
+            } else if (want.equals("escore")) {
+                rs = stmt.executeQuery("SELECT eid,ename,esex,escore FROM staff ORDER BY escore DESC");
+                rs.beforeFirst();
+
+                //使用alibaba的fastjson建立一个json对象
+                JSONArray staffJson = new JSONArray();
+                while (rs.next()) {
+                    //创建服务列表信息哈希表
+                    HashMap<String, String> staffList = new HashMap<String, String>();
+
+                    String eid = rs.getString(1);
+                    String ename = rs.getString(2);
+                    String esex = rs.getString(3);
+                    String esrore = rs.getString(4);
+
+                    staffList.put("eid", eid);
+                    staffList.put("ename", ename);
+                    staffList.put("esex", esex);
+                    staffList.put("esrore", esrore);
 
                     //把hashmap对象添加到json数组中
                     staffJson.add(staffList);
@@ -169,7 +198,7 @@ public class StaffMnage extends HttpServlet {
                 o.write(staffJson.toJSONString());
                 //断开数据库连接
                 rs.close();
-                System.out.println("输出员工列表成功");
+                System.out.println("输出员工绩效成功");
             }
 
         } catch (Exception throwables) {
