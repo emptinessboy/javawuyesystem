@@ -37,7 +37,6 @@ public class MoneyApi extends HttpServlet {
             throwables.printStackTrace();
         }
 
-
         //因为涉及“钱”的操作
         //事务默认就是自动提交的。 需要开启事务，关闭自动提交。
         try {
@@ -47,34 +46,101 @@ public class MoneyApi extends HttpServlet {
             throwables.printStackTrace();
         }
 
-
-        //创建stmt类
-//        Statement stmt = db.getStatement();
-
         String method = request.getParameter("method");
-        String cno = request.getParameter("uid");
-        String sid = request.getParameter("service");
-        String date = request.getParameter("date").substring(0, 19);
-        String times = request.getParameter("times");
-        String staff = request.getParameter("staff");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date d = null;
-        try {
-            d = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        //这句话加8小时
-        d.setTime(d.getTime() + 8 * 60 * 60 * 1000);
-        //System.out.println(d);
-        //时间对象转字符串
-        date = sdf.format(d);
-        System.out.println(method + " " + cno + " " + sid + " " + date + " " + times + " " + staff);
-
-        if (method.equals("delete")) {
-            //
+        if (method.equals("income")) {
+            //用来充值物业费
+//            String id = request.getParameter("id");
+//            String rm = "delete from record where id = \"" + id + "\"";
+//            try {
+//                if (stmt.executeUpdate(rm) == 0) {
+//                    o.write("Fail，删除失败！");
+//                    System.out.println("Fail，删除失败！" + rm);
+//                    response.setStatus(202);
+//                } else {
+//                    con.commit();
+//                    System.out.println("OK，删除成功！" + rm);
+//                    System.out.println(rm);
+//                    o.write("OK，删除成功！");
+//                }
+//            } catch (SQLException throwables) {
+//                try {
+//                    con.rollback();
+//                    System.out.println("遇到异常，回滚数据库成功");
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//                o.write("Fail，删除失败！");
+//                System.out.println("Fail，删除失败！" + rm);
+//                throwables.printStackTrace();
+//                response.setStatus(204);
+//            } finally {
+//                //使用定义的工具类一键断开con和stmt连接
+//                try {
+//                    stmt.close();
+//                    con.close();
+//                    System.out.println("断开事务的mysql连接成功");
+//                } catch (SQLException throwables) {
+//                    throwables.printStackTrace();
+//                }
+//            }
+        } else if (method.equals("delete")) {
+            //用来删除物业费记录
+            String id = request.getParameter("id");
+            String rm = "delete from record where id = \"" + id + "\"";
+            try {
+                if (stmt.executeUpdate(rm) == 0) {
+                    o.write("Fail，删除失败！");
+                    System.out.println("Fail，删除失败！" + rm);
+                    response.setStatus(202);
+                } else {
+                    con.commit();
+                    System.out.println("OK，删除成功！" + rm);
+                    System.out.println(rm);
+                    o.write("OK，删除成功！");
+                }
+            } catch (SQLException throwables) {
+                try {
+                    con.rollback();
+                    System.out.println("遇到异常，回滚数据库成功");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                o.write("Fail，删除失败！");
+                System.out.println("Fail，删除失败！" + rm);
+                throwables.printStackTrace();
+                response.setStatus(204);
+            } finally {
+                //使用定义的工具类一键断开con和stmt连接
+                try {
+                    stmt.close();
+                    con.close();
+                    System.out.println("断开事务的mysql连接成功");
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         } else if (method.equals("pay")) {
+            //用来支付物业费
+            String cno = request.getParameter("uid");
+            String sid = request.getParameter("service");
+            String date = request.getParameter("date").substring(0, 19);
+            String times = request.getParameter("times");
+            String staff = request.getParameter("staff");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date d = null;
+            try {
+                d = sdf.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //这句话加8小时
+            d.setTime(d.getTime() + 8 * 60 * 60 * 1000);
+            //System.out.println(d);
+            //时间对象转字符串
+            date = sdf.format(d);
+            System.out.println(method + " " + cno + " " + sid + " " + date + " " + times + " " + staff);
 
             //增加物业服务次数记录
             //使用sql语句内置的运算可以避免把整个表遍历再update的性能损耗
