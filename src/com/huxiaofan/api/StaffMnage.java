@@ -35,28 +35,28 @@ public class StaffMnage extends HttpServlet {
         if (method.equals("delete")) {
 
             //此段代码判断参数中 method 若为 delete，则删除对应服务项目
-//            String d = "delete from service where sid = \"" + sid + "\"";
-//            System.out.println(d);
-//            try {
-//                if (stmt.executeUpdate(d) == 0) {
-//                    o.write("Fail，删除失败！");
-//                    System.out.println("Fail，删除失败！" + d);
-//                    response.setStatus(202);
-//                } else {
-//                    System.out.println("OK，删除成功！" + sid);
-//                    System.out.println(d);
-//                    o.write("OK，删除成功！");
-//                }
-//            } catch (SQLException throwables) {
-//                o.write("Fail，删除失败！");
-//                System.out.println("Fail，删除失败！" + d);
-//                throwables.printStackTrace();
-//                response.setStatus(204);
-//            }finally {
-//                System.out.println("删除物业服务成功");
-//                //使用定义的工具类一键断开con和stmt连接
-//                db.closeConnect();
-//            }
+            String d = "delete from staff where eid = \"" + eid + "\"";
+            System.out.println(d);
+            try {
+                if (stmt.executeUpdate(d) == 0) {
+                    o.write("Fail，删除员工失败！");
+                    System.out.println("Fail，删除员工失败！");
+                    response.setStatus(202);
+                } else {
+                    System.out.println("OK，删除员工成功！" + eid);
+                    System.out.println(d);
+                    o.write("OK，删除员工成功！");
+                }
+            } catch (SQLException throwables) {
+                o.write("Fail，删除员工失败！");
+                System.out.println("Fail，删除员工失败！");
+                throwables.printStackTrace();
+                response.setStatus(204);
+            }finally {
+                System.out.println("删除员工成功");
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
+            }
         } else {
             //反之则添加服务
             String ename = request.getParameter("name");
