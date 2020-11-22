@@ -28,8 +28,7 @@ public class ListMembers extends HttpServlet {
 
         //定义输出对象
         Writer o = response.getWriter();
-        //result接口
-        ResultSet rs;
+
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类

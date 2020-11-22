@@ -23,8 +23,6 @@ public class ServiceManage extends HttpServlet {
         httpUtils.httpUtil(request,response);
         //定义输出对象
         Writer o = response.getWriter();
-        //result接口
-        ResultSet rs;
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类
@@ -103,8 +101,7 @@ public class ServiceManage extends HttpServlet {
 
         Writer o = response.getWriter();
 
-        //result接口
-        ResultSet rs;
+
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类
@@ -114,6 +111,8 @@ public class ServiceManage extends HttpServlet {
             if (want == null) {
                 o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
             } else if (want.equals("sid")) {
+                //result接口
+                ResultSet rs;
                 rs = stmt.executeQuery("SELECT sid FROM service");
                 rs.beforeFirst();
                 Long maxid = 0L;
@@ -136,6 +135,8 @@ public class ServiceManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出新物业服务ID成功");
             } else if (want.equals("slist")) {
+                //result接口
+                ResultSet rs;
                 rs = stmt.executeQuery("SELECT * FROM service");
                 rs.beforeFirst();
 

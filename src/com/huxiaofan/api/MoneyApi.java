@@ -204,7 +204,6 @@ public class MoneyApi extends HttpServlet {
                         "VALUES" +
                         "(\'" + method + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\',\'" + smoney + "\')";
 
-
                 if (rid == null) {
                     o.write("Fail，用户ID不存在！");
                     System.out.println("Fail，用户ID不存在！" + f);
@@ -226,12 +225,25 @@ public class MoneyApi extends HttpServlet {
                     System.out.println("Fail，插入用户名密码失败！" + m);
                     response.setStatus(202);
                 } else {
+
+                    //增加员工绩效
+                    //绩效增加失败不影响整体执行
+                    Double jx = Double.valueOf(times)*5;
+                    String s = "update staff set escore=escore+"+ jx +" where eid = " + staff;
+                    try{
+                        stmt.executeUpdate(s);
+                        System.out.println("员工绩效增加成功！" + s);
+                    }catch (Exception e){
+                        System.out.println(e);
+                    }
+
                     //没问题的话才提交数据库查询
                     con.commit();
                     System.out.println("OK，新增物业费记录成功！" + sid);
                     System.out.println(a);
                     o.write("OK，新增物业费记录成功！");
                 }
+
             } catch (SQLException throwables) {
                 try {
                     con.rollback();

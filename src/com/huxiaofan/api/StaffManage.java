@@ -22,8 +22,7 @@ public class StaffManage extends HttpServlet {
         httpUtils.httpUtil(request, response);
         //定义输出对象
         Writer o = response.getWriter();
-        //result接口
-        ResultSet rs;
+
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类
@@ -34,7 +33,7 @@ public class StaffManage extends HttpServlet {
 
         if (method.equals("delete")) {
 
-            //此段代码判断参数中 method 若为 delete，则删除对应服务项目
+            // 此段代码判断参数中 method 若为 delete，则删除对应服务项目
             // String d = "delete from staff where eid = \"" + eid + "\"";
 
             //这里使用了leftjoin多表联合查询进行删除;
@@ -110,8 +109,7 @@ public class StaffManage extends HttpServlet {
 
         Writer o = response.getWriter();
 
-        //result接口
-        ResultSet rs;
+
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类
@@ -121,6 +119,8 @@ public class StaffManage extends HttpServlet {
             if (want == null) {
                 o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
             } else if (want.equals("eid")) {
+                //result接口
+                ResultSet rs;
                 rs = stmt.executeQuery("SELECT eid FROM staff");
                 rs.beforeFirst();
                 Long maxid = 0L;
@@ -143,6 +143,8 @@ public class StaffManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出新员工ID成功");
             } else if (want.equals("elist")) {
+                //result接口
+                ResultSet rs;
                 rs = stmt.executeQuery("SELECT * FROM staff");
                 rs.beforeFirst();
 
@@ -178,6 +180,8 @@ public class StaffManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出员工列表成功");
             } else if (want.equals("escore")) {
+                //result接口
+                ResultSet rs;
                 rs = stmt.executeQuery("SELECT eid,ename,esex,escore FROM staff ORDER BY escore DESC");
                 rs.beforeFirst();
 
