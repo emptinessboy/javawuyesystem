@@ -24,7 +24,7 @@ public class ListMembers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //此api用于删除和修改用户
         //封装的http请求响应头
-        httpUtils.httpUtil(request,response);
+        httpUtils.httpUtil(request, response);
 
         //定义输出对象
         Writer o = response.getWriter();
@@ -38,7 +38,11 @@ public class ListMembers extends HttpServlet {
         //如果参数中method为删除，则操作mysql删除数据
         if (request.getParameter("method").equals("delete")) {
             String cno = request.getParameter("cno");
-            String d = "delete from members where cno = \"" + cno + "\"";
+            //这里使用了leftjoin多表联合查询进行删除;
+            String d = "delete members,mpass,record from members " +
+                    "LEFT JOIN mpass ON members.cno=mpass.cno" +
+                    " LEFT JOIN record on members.cno=record.cno " +
+                    "where members.cno = \"" + cno + "\"";
             try {
                 if (stmt.executeUpdate(d) == 0) {
                     o.write("Fail，删除失败！");
@@ -107,7 +111,7 @@ public class ListMembers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //此接口返回用户列表
         //封装的http请求响应头
-        httpUtils.httpUtil(request,response);
+        httpUtils.httpUtil(request, response);
 
         //定义输出对象
         Writer o = response.getWriter();
