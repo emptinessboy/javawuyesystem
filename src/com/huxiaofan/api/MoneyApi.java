@@ -200,12 +200,14 @@ public class MoneyApi extends HttpServlet {
             while (rs.next()) {
                 //创建用户信息哈希表
                 HashMap<String, String> records = new HashMap<String, String>();
+                String id = rs.getString(7);
                 String date = rs.getString(1);
                 String cno = rs.getString(2);
                 String sid = rs.getString(3);
                 String method = rs.getString(4);
                 String times = rs.getString(5);
                 String staff = rs.getString(6);
+                records.put("id", id);
                 records.put("date", date);
                 records.put("cno", cno);
                 records.put("sid", sid);
