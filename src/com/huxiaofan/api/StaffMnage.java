@@ -10,13 +10,91 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
 @WebServlet(name = "StaffMnage")
 public class StaffMnage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//此方法用来添加和删除服务
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
+        //定义输出对象
+        Writer o = response.getWriter();
+        //result接口
+        ResultSet rs;
+        //新的数据工具类对象
+        dbUtils db = new dbUtils();
+        //创建stmt类
+        Statement stmt = db.getStatement();
 
+        String method = request.getParameter("method");
+        String eid = request.getParameter("id");
+
+        if (method.equals("delete")) {
+
+            //此段代码判断参数中 method 若为 delete，则删除对应服务项目
+//            String d = "delete from service where sid = \"" + sid + "\"";
+//            System.out.println(d);
+//            try {
+//                if (stmt.executeUpdate(d) == 0) {
+//                    o.write("Fail，删除失败！");
+//                    System.out.println("Fail，删除失败！" + d);
+//                    response.setStatus(202);
+//                } else {
+//                    System.out.println("OK，删除成功！" + sid);
+//                    System.out.println(d);
+//                    o.write("OK，删除成功！");
+//                }
+//            } catch (SQLException throwables) {
+//                o.write("Fail，删除失败！");
+//                System.out.println("Fail，删除失败！" + d);
+//                throwables.printStackTrace();
+//                response.setStatus(204);
+//            }finally {
+//                System.out.println("删除物业服务成功");
+//                //使用定义的工具类一键断开con和stmt连接
+//                db.closeConnect();
+//            }
+        } else {
+            //反之则添加服务
+            String ename = request.getParameter("name");
+            String esex = request.getParameter("sex");
+            String epass = request.getParameter("pass");
+            String admin = request.getParameter("isadmin");
+            int isadmin = 0;
+            if (admin.equals("true")){
+                isadmin = 1;
+            }
+            System.out.println(method + " " + eid + " " + ename + " " + esex + " " + epass + " " + isadmin);
+
+            String s = "INSERT INTO staff" +
+                    "(eid,ename,esex,epass,isadmin)" +
+                    "VALUES" +
+                    "(\'" + eid + "\',\'" + ename + "\',\'" + esex + "\',\'" + epass + "\',\'" + isadmin + "\')";
+            System.out.println(s);
+            try {
+                if (stmt.executeUpdate(s) == 0) {
+                    o.write("Fail，插入失败！");
+                    System.out.println("Fail，插入用户信息失败！");
+                    response.setStatus(202);
+                } else {
+                    System.out.println("OK，新增成功！");
+                    System.out.println(s);
+                    o.write("OK，新增成功！");
+                }
+            } catch (SQLException throwables) {
+                o.write("Fail，插入失败！");
+                System.out.println("Fail，插入失败！");
+                throwables.printStackTrace();
+                response.setStatus(204);
+            }finally {
+                System.out.println("新增员工成功");
+                //使用定义的工具类一键断开con和stmt连接
+                db.closeConnect();
+            }
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
