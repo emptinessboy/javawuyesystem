@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 20/11/2020 23:17:23
+ Date: 22/11/2020 21:21:32
 */
 
 SET NAMES utf8mb4;
@@ -34,15 +34,15 @@ CREATE TABLE `members`  (
 -- ----------------------------
 -- Records of members
 -- ----------------------------
-INSERT INTO `members` VALUES ('2009000001', '李明', '男', '计算机系', '2020-11-20 11:20:31', 100);
-INSERT INTO `members` VALUES ('2009000002', '赵伟', '女', '信息系', '1989-06-09 00:00:00', 100);
+INSERT INTO `members` VALUES ('2009000001', '李明', '男', '计算机系', '2020-11-20 11:20:31', 22);
+INSERT INTO `members` VALUES ('2009000002', '赵伟', '女', '信息系', '1989-06-09 00:00:00', 50);
 INSERT INTO `members` VALUES ('2009000004', '张立', '男', '信息系', '1989-06-07 00:00:00', 100);
 INSERT INTO `members` VALUES ('2009000005', '李明', '男', '管理系', '1987-04-03 00:00:00', 90);
 INSERT INTO `members` VALUES ('2009000006', '张小悔', '女', '信息系', '1986-01-03 00:00:00', 90);
 INSERT INTO `members` VALUES ('2009000007', '封小文', '女', '管理系', '1988-07-07 00:00:00', 90);
 INSERT INTO `members` VALUES ('2009000008', '冯晓文', '男', '文传系', '1987-05-06 00:00:00', 90);
 INSERT INTO `members` VALUES ('2009000009', '孙红梅', '女', '英语系', '1990-09-10 00:00:00', 90);
-INSERT INTO `members` VALUES ('2009000010', '沈三明', '男', '文传系', '1986-06-06 00:00:00', 80);
+INSERT INTO `members` VALUES ('2009000010', '沈三明', '男', '文传系', '1986-06-06 00:00:00', 0);
 INSERT INTO `members` VALUES ('2009000011', '志吴扬', '男', '计算机系', '1987-04-05 00:00:00', 110);
 INSERT INTO `members` VALUES ('2009000012', '徐艳霞', '女', '英语系', '1990-09-10 00:00:00', 120);
 INSERT INTO `members` VALUES ('2009000013', '陈峰子明', '男', '管理系', '1989-05-03 00:00:00', 130);
@@ -63,10 +63,10 @@ INSERT INTO `members` VALUES ('2010000008', '吴乐乐', '女', '英语系', '19
 INSERT INTO `members` VALUES ('2010000009', '李小超', '男', '文传系', '1990-06-06 00:00:00', 99);
 INSERT INTO `members` VALUES ('2010000010', '陈志豪', '男', '计算机系', '1991-04-05 00:00:00', 33);
 INSERT INTO `members` VALUES ('2011000001', '楼小亮', '男', '管理系', '1989-05-03 00:00:00', 45);
-INSERT INTO `members` VALUES ('2011000002', '胡晓帆', '男', '宁波市，鄞州区，xx小区，xx栋，888室', '2020-11-20 14:05:22', 268);
-INSERT INTO `members` VALUES ('2011000005', '刘呵呵', '男', '宁波市，鄞州区，xx小区，xx栋，11室', '2020-11-20 14:12:48', 157);
+INSERT INTO `members` VALUES ('2011000002', '胡晓帆', '男', '宁波市，鄞州区，xx小区，xx栋，888室', '2020-11-20 14:05:22', 168);
+INSERT INTO `members` VALUES ('2011000005', '刘呵呵', '男', '宁波市，鄞州区，xx小区，xx栋，11室', '2020-11-20 14:12:48', 57);
 INSERT INTO `members` VALUES ('2011000006', '魏建楠', '女', '666', '2020-11-20 15:38:38', 2);
-INSERT INTO `members` VALUES ('2011000007', '刘思远', '女', '山东分公司d', '2020-11-20 15:38:48', 1);
+INSERT INTO `members` VALUES ('2011000007', '刘思远', '女', '山东分公司d', '2020-11-20 15:38:48', 51);
 
 -- ----------------------------
 -- Table structure for mpass
@@ -87,6 +87,30 @@ INSERT INTO `mpass` VALUES ('2011000006', '860c56f28eecd24e1170d56d6feccedd');
 INSERT INTO `mpass` VALUES ('2011000007', '529e1fb35450b6f2dd613f7dbd8f7017');
 
 -- ----------------------------
+-- Table structure for record
+-- ----------------------------
+DROP TABLE IF EXISTS `record`;
+CREATE TABLE `record`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `date` datetime(6) NULL DEFAULT NULL,
+  `cno` int(0) NULL DEFAULT NULL,
+  `sid` int(0) NULL DEFAULT NULL,
+  `method` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `times` int(0) NULL DEFAULT NULL,
+  `staff` int(0) NULL DEFAULT NULL,
+  `money` double(5, 2) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of record
+-- ----------------------------
+INSERT INTO `record` VALUES (1, '2020-11-22 10:52:26.000000', 2009000002, 6, 'pay', 1, 1, 50.00);
+INSERT INTO `record` VALUES (2, '2020-11-22 20:17:39.000000', 2011000007, NULL, 'income', 1, NULL, 100.00);
+INSERT INTO `record` VALUES (20, '2020-11-22 20:58:09.000000', 2011000002, 1, 'pay', 2, 1, 100.00);
+INSERT INTO `record` VALUES (21, '2020-11-22 21:03:54.000000', 2011000005, 3, 'pay', 2, 6, 100.00);
+
+-- ----------------------------
 -- Table structure for service
 -- ----------------------------
 DROP TABLE IF EXISTS `service`;
@@ -102,6 +126,38 @@ CREATE TABLE `service`  (
 -- ----------------------------
 -- Records of service
 -- ----------------------------
-INSERT INTO `service` VALUES (1, '楼道清理', 50.00, '帮助业主清理单元楼楼道卫生保洁', 1);
+INSERT INTO `service` VALUES (1, '楼道清理', 50.00, '帮助业主清理单元楼楼道卫生保洁', 10);
+INSERT INTO `service` VALUES (2, '上门开锁', 200.00, '专业的开人员，帮助业主开锁。（本服务需要业主实名登记）', 0);
+INSERT INTO `service` VALUES (3, '电路修理', 50.00, '上门更换保险丝 / 空气开关 / 漏电保护器等', 3);
+INSERT INTO `service` VALUES (4, '水路维修', 100.00, '室内水管更换，水龙头，花洒，洗衣机安装', 1);
+INSERT INTO `service` VALUES (5, '水管疏通', 50.00, '马桶，下水道堵塞清理疏通', 1);
+INSERT INTO `service` VALUES (6, '水费代扣缴', 50.00, '使用物业费余额充值水费', 1);
+INSERT INTO `service` VALUES (7, '电费代扣缴', 50.00, '使用物业费缴纳电费', 1);
+INSERT INTO `service` VALUES (8, '燃气费代扣缴', 50.00, '使用物业费缴纳煤气费', 0);
+
+-- ----------------------------
+-- Table structure for staff
+-- ----------------------------
+DROP TABLE IF EXISTS `staff`;
+CREATE TABLE `staff`  (
+  `eid` int(0) NOT NULL AUTO_INCREMENT,
+  `ename` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `esex` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `escore` int(0) NULL DEFAULT 0,
+  `epass` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `isadmin` tinyint(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`eid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of staff
+-- ----------------------------
+INSERT INTO `staff` VALUES (1, '胡晓帆', '男', 210, '798afc6251a846ce3f14c36a9ccdc669', 1);
+INSERT INTO `staff` VALUES (2, '王帅帅', '男', 10, '913c6ddb803fe570449cf880674dd109', 0);
+INSERT INTO `staff` VALUES (3, '刘拖地', '女', 6, '913c6ddb803fe570449cf880674dd109', 0);
+INSERT INTO `staff` VALUES (4, '陆刷锅', '男', 5, '913c6ddb803fe570449cf880674dd109', 0);
+INSERT INTO `staff` VALUES (5, '魏算账', '男', 2, '913c6ddb803fe570449cf880674dd109', 0);
+INSERT INTO `staff` VALUES (6, '李水电', '男', 55, '913c6ddb803fe570449cf880674dd109', 0);
+INSERT INTO `staff` VALUES (7, '赵锤子', '男', 8, '913c6ddb803fe570449cf880674dd109', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
