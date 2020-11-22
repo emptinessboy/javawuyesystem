@@ -1,5 +1,7 @@
 package com.huxiaofan.api;
 
+import com.alibaba.fastjson.JSONArray;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @WebServlet(name = "MoneyApi")
 public class MoneyApi extends HttpServlet {
@@ -176,6 +179,57 @@ public class MoneyApi extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //此接口返回物业费记录列表
+        //封装的http请求响应头
+        httpUtils.httpUtil(request,response);
 
+        //定义输出对象
+        Writer o = response.getWriter();
+        //result接口
+        ResultSet rs;
+
+        dbUtils db = new dbUtils();
+        try {
+            Statement stmt = db.getStatement();
+            rs = stmt.executeQuery("SELECT * FROM record");
+
+            rs.beforeFirst();
+            //使用alibaba的fastjson建立一个json对象
+            JSONArray recordsJson = new JSONArray();
+
+            while (rs.next()) {
+                //创建用户信息哈希表
+                HashMap<String, String> records = new HashMap<String, String>();
+                String date = rs.getString(1);
+                String cno = rs.getString(2);
+                String sid = rs.getString(3);
+                String method = rs.getString(4);
+                String times = rs.getString(5);
+                String staff = rs.getString(6);
+                records.put("date", date);
+                records.put("cno", cno);
+                records.put("sid", sid);
+                if (method.equals("pay")){
+                    records.put("method", "服务消费");
+                }else {
+                    records.put("method", "物业费充值");
+                }
+                records.put("times", times);
+                records.put("staff", staff);
+                //把hashmap对象添加到json数组中
+                recordsJson.add(records);
+            }
+            //字符串输出json内容
+            o.write(recordsJson.toJSONString());
+            //断开数据库连接
+            rs.close();
+            //使用定义的工具类一键断开con和stmt连接
+            //db.closeConnect();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            //使用定义的工具类一键断开con和stmt连接
+            db.closeConnect();
+        }
     }
 }
