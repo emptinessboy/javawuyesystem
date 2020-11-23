@@ -58,6 +58,9 @@ public class LoginApi extends HttpServlet {
                     epass = rs.getString(3);
                     isadmin = rs.getString(4);
                 }
+                //断开数据库连接
+                rs.close();
+                db.closeConnect();
 
                 if (eid != null && eid.equals(u)){
                     if (epass != null && epass.equals(p)){
@@ -108,8 +111,7 @@ public class LoginApi extends HttpServlet {
                     loginErr(response,"参数错误");
                 }
 
-                rs.close();
-                db.closeConnect();
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
