@@ -76,7 +76,7 @@ public class ListMembers extends HttpServlet {
 
             try {
                 //先转换为时间对象是为了解决时区UTF-8同步的的问题
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date d = sdf.parse(cregtime);
                 //这句话加8小时
                 d.setTime(d.getTime() + 8 * 60 * 60 * 1000);

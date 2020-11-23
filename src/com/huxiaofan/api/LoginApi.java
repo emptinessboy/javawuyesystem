@@ -1,5 +1,7 @@
 package com.huxiaofan.api;
 
+import com.alibaba.fastjson.JSONArray;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -64,7 +66,6 @@ public class LoginApi extends HttpServlet {
                         //获取session
                         HttpSession hs = request.getSession(true);
 
-
                         //md5加时间戳生成一个随机token
                         Date d = new Date();
                         double rd = Math.random();
@@ -80,11 +81,15 @@ public class LoginApi extends HttpServlet {
                         value.put("ename",ename);
                         value.put("isadmin",isadmin);
 
+                        //把hashmap写入session
                         hs.setAttribute(token,value);
-//                        hs.setAttribute(token,ename);
-//                        hs.setAttribute(token,isadmin);
 
-                        o.write("认证成功");
+                        value.put("token",token);
+
+                        JSONArray successJson = new JSONArray();
+                        successJson.add(value);
+
+                        o.write(successJson.toJSONString());
 
 
                     }else {
@@ -114,9 +119,10 @@ public class LoginApi extends HttpServlet {
 
     public static void loginErr(HttpServletResponse response){
         try {
+            response.setStatus(401);
             Writer o = response.getWriter();
             o.write("认证失败！");
-            response.setStatus(401);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
