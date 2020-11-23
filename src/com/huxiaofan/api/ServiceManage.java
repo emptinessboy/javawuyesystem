@@ -105,12 +105,13 @@ public class ServiceManage extends HttpServlet {
         //新的数据工具类对象
         dbUtils db = new dbUtils();
         //创建stmt类
-        Statement stmt = db.getStatement();
+
         String want = request.getParameter("want");
         try {
             if (want == null) {
                 o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
             } else if (want.equals("sid")) {
+                Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
                 rs = stmt.executeQuery("SELECT sid FROM service");
@@ -135,6 +136,7 @@ public class ServiceManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出新物业服务ID成功");
             } else if (want.equals("slist")) {
+                Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
                 rs = stmt.executeQuery("SELECT * FROM service");
