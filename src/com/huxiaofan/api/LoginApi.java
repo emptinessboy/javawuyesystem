@@ -76,13 +76,21 @@ public class LoginApi extends HttpServlet {
                         String token = newMD5(String.valueOf(sec));
                         System.out.println("随机token生成完毕： "+token);
 
+                        //把用户信息写入session
+                        hs.setAttribute("isadmin",isadmin);
+                        hs.setAttribute("eid",eid);
+                        hs.setAttribute("ename",ename);
+                        //设置session过期时间半小时
+                        hs.setMaxInactiveInterval(1800);
+                        //将token和对应的session存到Attribute中供所有servlet访问
+                        getServletContext().setAttribute(token, hs);
+                        System.out.println("认证成功，token和session已保存到服务端");
+
+                        //向客户端返回 JSON 用户名，ID，和是否管理员
                         HashMap<String, String> value = new HashMap<String, String>();
                         value.put("eid",eid);
                         value.put("ename",ename);
                         value.put("isadmin",isadmin);
-
-                        //把hashmap写入session
-                        hs.setAttribute(token,value);
 
                         value.put("token",token);
 
@@ -91,12 +99,13 @@ public class LoginApi extends HttpServlet {
 
                         o.write(successJson.toJSONString());
 
-
                     }else {
-                        loginErr(response);
+                        System.out.println("用户名密码错误！");
+                        loginErr(response,"用户名密码错误！");
                     }
                 }else {
-                    loginErr(response);
+                    System.out.println("参数错误！");
+                    loginErr(response,"参数错误");
                 }
 
                 rs.close();
@@ -117,11 +126,11 @@ public class LoginApi extends HttpServlet {
         this.doPost(request, response);
     }
 
-    public static void loginErr(HttpServletResponse response){
+    public static void loginErr(HttpServletResponse response,String message){
         try {
             response.setStatus(401);
             Writer o = response.getWriter();
-            o.write("认证失败！");
+            o.write("Faild！"+  message);
 
         } catch (IOException e) {
             e.printStackTrace();

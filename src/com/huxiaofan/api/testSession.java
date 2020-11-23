@@ -26,24 +26,35 @@ public class testSession extends HttpServlet {
 
         String FileName="";
         HttpSession session=request.getSession();//获取session
-        Object name=session.getAttribute(request.getParameter("session"));
-        System.out.println("通过参数匹配到的session为：" + name);
-        Enumeration enumeration =session.getAttributeNames();//获取session中所有的键值对
+        Enumeration enumerationA =session.getAttributeNames();//获取session中所有的键值对
 
         //方法二：通过for循环进行遍历
-        while(enumeration.hasMoreElements()){
-            String AddFileName=enumeration.nextElement().toString();//获取session中的键值
-
-            HashMap<String, String> value= (HashMap<String, String>) session.getAttribute(AddFileName);//根据键值取出session中的值
-            System.out.println("遍历得到的session内容：" + value.get("eid"));
-            System.out.println("遍历得到的session内容：" + value.get("ename"));
-            System.out.println("遍历得到的session内容：" + value.get("isadmin"));
-//            String value=(String)session.getAttribute(AddFileName);//根据键值取出session中的值
-//            System.out.println("遍历得到的session内容：" + value);
-
-            //String FileName= (String)session.getAttribute("AddFileName");
+        while(enumerationA.hasMoreElements()){
+            // 获取session的属性名称
+            String name = enumerationA.nextElement().toString();
+            // 根据键值取session中的值
+            Object value = session.getAttribute(name);
+            // 打印结果
+            System.out.println("----------" + name + "------------" + value );
         }
 
+        //通过传入参数取得指定session
+        String token = request.getParameter("token");
+        if (token!=null){
+            HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
+
+            Enumeration enumerationB =hs.getAttributeNames();//获取session中所有的键值对
+
+            //方法二：通过for循环进行遍历
+            while(enumerationB.hasMoreElements()){
+                // 获取session的属性名称
+                String name = enumerationB.nextElement().toString();
+                // 根据键值取session中的值
+                Object value = hs.getAttribute(name);
+                // 打印结果
+                System.out.println("----------" + name + "------------" + value );
+            }
+        }
 
     }
 }
