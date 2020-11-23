@@ -25,6 +25,7 @@ public class testSession extends HttpServlet {
         Writer o = response.getWriter();
 
         String FileName="";
+        System.out.println("当前的session内容");
         HttpSession session=request.getSession();//获取session
         Enumeration enumerationA =session.getAttributeNames();//获取session中所有的键值对
 
@@ -39,6 +40,7 @@ public class testSession extends HttpServlet {
         }
 
         //通过传入参数取得指定session
+        System.out.println("通过token取得的session内容");
         String token = request.getParameter("token");
         if (token!=null){
             HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
