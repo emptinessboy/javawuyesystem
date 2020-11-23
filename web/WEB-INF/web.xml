@@ -51,7 +51,7 @@
         <servlet-name>LoginApi</servlet-name>
         <url-pattern>/api/login</url-pattern>
     </servlet-mapping>
-
+    <!--测试类-->
     <servlet>
         <servlet-name>testSession</servlet-name>
         <servlet-class>com.huxiaofan.api.testSession</servlet-class>
@@ -60,4 +60,29 @@
         <servlet-name>testSession</servlet-name>
         <url-pattern>/testsession</url-pattern>
     </servlet-mapping>
+    <!--过滤器-->
+    <filter>
+        <filter-name>FilterAuth</filter-name>
+        <filter-class>com.huxiaofan.api.FilterAuth</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>ListMembers</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>AddMembers</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>ServiceManage</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>MoneyApi</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>StaffManage</servlet-name>
+    </filter-mapping>
 </web-app>
