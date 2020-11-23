@@ -112,13 +112,14 @@ public class StaffManage extends HttpServlet {
 
         //新的数据工具类对象
         dbUtils db = new dbUtils();
-        //创建stmt类
-        Statement stmt = db.getStatement();
+
         String want = request.getParameter("want");
         try {
             if (want == null) {
                 o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
             } else if (want.equals("eid")) {
+                //创建stmt类
+                Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
                 rs = stmt.executeQuery("SELECT eid FROM staff");
@@ -143,6 +144,8 @@ public class StaffManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出新员工ID成功");
             } else if (want.equals("elist")) {
+                //创建stmt类
+                Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
                 rs = stmt.executeQuery("SELECT * FROM staff");
@@ -180,6 +183,8 @@ public class StaffManage extends HttpServlet {
                 rs.close();
                 System.out.println("输出员工列表成功");
             } else if (want.equals("escore")) {
+                //创建stmt类
+                Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
                 rs = stmt.executeQuery("SELECT eid,ename,esex,escore FROM staff ORDER BY escore DESC");
