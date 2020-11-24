@@ -21,28 +21,33 @@ public class FilterAuth implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
         String token = req.getParameter("token");
-        if (token!=null) {
+        if (token != null) {
             HttpSession hs = (HttpSession) context.getAttribute(token);
-            if (hs==null){
-                loginErr((HttpServletResponse) resp,"无效的令牌！");
+            if (hs == null) {
+                loginErr((HttpServletResponse) resp, "无效的令牌！");
                 return;
-            }else {
-                //获取session中所有的键值对
-                Enumeration enumerationB =hs.getAttributeNames();
-                //方法二：通过for循环进行遍历
-                while(enumerationB.hasMoreElements()){
-                    // 获取session的属性名称
-                    String name = enumerationB.nextElement().toString();
-                    // 根据键值取session中的值
-                    Object value = hs.getAttribute(name);
-                    // 打印结果
-                    System.out.println("----------" + name + "------------" + value );
+            } else {
+                try {
+                    //获取session中所有的键值对
+                    Enumeration enumerationB = hs.getAttributeNames();
+                    //方法二：通过for循环进行遍历
+                    while (enumerationB.hasMoreElements()) {
+                        // 获取session的属性名称
+                        String name = enumerationB.nextElement().toString();
+                        // 根据键值取session中的值
+                        Object value = hs.getAttribute(name);
+                        // 打印结果
+                        System.out.println("----------" + name + "------------" + value);
+                    }
+                    //放行
+                    chain.doFilter(req, resp);
+
+                } catch (Exception e) {
+                    loginErr((HttpServletResponse) resp, "令牌已过期！");
                 }
-                //放行
-                chain.doFilter(req, resp);
             }
-        }else {
-            loginErr((HttpServletResponse) resp,"从未登录！");
+        } else {
+            loginErr((HttpServletResponse) resp, "从未登录！");
             return;
         }
 
@@ -52,7 +57,7 @@ public class FilterAuth implements Filter {
         context = config.getServletContext();
     }
 
-    public static void loginErr(HttpServletResponse response, String message){
+    public static void loginErr(HttpServletResponse response, String message) {
         response.setContentType("application/json; charset=utf-8");
         //允许跨域请求
         response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
@@ -64,7 +69,7 @@ public class FilterAuth implements Filter {
         try {
             response.setStatus(405);
             Writer o = response.getWriter();
-            o.write("Faild！"+  message);
+            o.write("Faild！" + message);
 
         } catch (IOException e) {
             e.printStackTrace();
