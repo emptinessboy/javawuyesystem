@@ -181,6 +181,7 @@ public class ServiceManage extends HttpServlet {
             }
 
         } catch (Exception throwables) {
+            response.setStatus(502);
             throwables.printStackTrace();
         } finally {
             //使用定义的工具类一键断开con和stmt连接
