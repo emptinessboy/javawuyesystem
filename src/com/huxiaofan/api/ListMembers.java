@@ -29,13 +29,12 @@ public class ListMembers extends HttpServlet {
         //定义输出对象
         Writer o = response.getWriter();
 
-        //新的数据工具类对象
-        dbUtils db = new dbUtils();
-        //创建stmt类
-        Statement stmt = db.getStatement();
-
         //如果参数中method为删除，则操作mysql删除数据
         if (request.getParameter("method").equals("delete")) {
+            //新的数据工具类对象
+            dbUtils db = new dbUtils();
+            //创建stmt类
+            Statement stmt = db.getStatement();
             String cno = request.getParameter("cno");
             //这里使用了leftjoin多表联合查询进行删除;
             String d = "delete members,mpass,record from members " +
@@ -44,24 +43,29 @@ public class ListMembers extends HttpServlet {
                     "where members.cno = \"" + cno + "\"";
             try {
                 if (stmt.executeUpdate(d) == 0) {
+                    response.setStatus(202);
                     o.write("Fail，删除失败！");
                     System.out.println("Fail，删除失败！" + d);
-                    response.setStatus(202);
                 } else {
+                    response.setStatus(200);
+                    o.write("OK，删除成功！");
                     System.out.println("OK，删除成功！" + cno);
                     System.out.println(d);
-                    o.write("OK，删除成功！");
                 }
             } catch (SQLException throwables) {
+                response.setStatus(204);
                 o.write("Fail，删除失败！");
                 System.out.println("Fail，删除失败！" + d);
                 throwables.printStackTrace();
-                response.setStatus(204);
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
                 db.closeConnect();
             }
         } else if (request.getParameter("method").equals("modify")) {
+            //新的数据工具类对象
+            dbUtils db = new dbUtils();
+            //创建stmt类
+            Statement stmt = db.getStatement();
             //从参数获取前端需要修改的学生ID
             String cno = request.getParameter("row[cno]");
             String cname = request.getParameter("row[cname]");
@@ -89,13 +93,14 @@ public class ListMembers extends HttpServlet {
                 //打印行数
                 int count = stmt.executeUpdate(m);
                 if (count > 0) {
+                    response.setStatus(200);
                     o.write("修改成功，影响行数：" + count);
                 }
                 System.out.println("修改成功，影响行数：" + count);
             } catch (SQLException | ParseException throwables) {
+                response.setStatus(204);
                 o.write("Fail，修改失败！");
                 System.out.println("Fail，修改失败！");
-                response.setStatus(204);
                 throwables.printStackTrace();
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
@@ -114,14 +119,12 @@ public class ListMembers extends HttpServlet {
 
         //定义输出对象
         Writer o = response.getWriter();
+        dbUtils db = new dbUtils();
+        Statement stmt = db.getStatement();
         //result接口
         ResultSet rs;
-
-        dbUtils db = new dbUtils();
         try {
-            Statement stmt = db.getStatement();
             rs = stmt.executeQuery("SELECT * FROM members");
-
             rs.beforeFirst();
             //使用alibaba的fastjson建立一个json对象
             JSONArray membersJson = new JSONArray();
@@ -145,6 +148,7 @@ public class ListMembers extends HttpServlet {
                 membersJson.add(members);
             }
             //字符串输出json内容
+            response.setStatus(200);
             o.write(membersJson.toJSONString());
             //断开数据库连接
             rs.close();

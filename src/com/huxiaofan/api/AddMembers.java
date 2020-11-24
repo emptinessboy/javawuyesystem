@@ -65,23 +65,24 @@ public class AddMembers extends HttpServlet {
                 "(\'" + cno + "\',\'" + cpass + "\')";
         try {
             if (stmt.executeUpdate(a1) == 0) {
+                response.setStatus(202);
                 o.write("Fail，插入失败！");
                 System.out.println("Fail，插入用户信息失败！" + a1);
-                response.setStatus(202);
             } else if (stmt.executeUpdate(a2) == 0) {
+                response.setStatus(202);
                 o.write("Fail，插入失败！");
                 System.out.println("Fail，插入用户名密码失败！" + a1);
-                response.setStatus(202);
             } else {
+                response.setStatus(200);
                 System.out.println("OK，新增成功！" + cno);
                 System.out.println(a1 + " " + a2);
                 o.write("OK，新增成功！");
             }
         } catch (SQLException throwables) {
+            response.setStatus(204);
             o.write("Fail，插入失败！");
             System.out.println("Fail，插入用户名密码失败！" + a1 + " & " + a2);
             throwables.printStackTrace();
-            response.setStatus(204);
         } finally {
             //使用定义的工具类一键断开con和stmt连接
             db.closeConnect();
@@ -120,6 +121,7 @@ public class AddMembers extends HttpServlet {
             JSONArray newidJson = new JSONArray();
             newidJson.add(newid);
             //输出json
+            response.setStatus(200);
             o.write(newidJson.toJSONString());
             //断开数据库连接
             rs.close();

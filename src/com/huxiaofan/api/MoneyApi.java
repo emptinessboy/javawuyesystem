@@ -66,13 +66,14 @@ public class MoneyApi extends HttpServlet {
             System.out.println(record);
             try {
                 if (stmt.executeUpdate(income) == 0 || stmt.executeUpdate(record) == 0) {
+                    response.setStatus(202);
                     o.write("Fail，充值失败！");
                     System.out.println("Fail，充值失败！");
-                    response.setStatus(202);
                 } else {
                     con.commit();
-                    System.out.println("OK，充值成功！");
+                    response.setStatus(200);
                     o.write("OK，充值成功！");
+                    System.out.println("OK，充值成功！");
                 }
             } catch (SQLException throwables) {
                 try {
@@ -81,10 +82,10 @@ public class MoneyApi extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                response.setStatus(204);
                 o.write("Fail，充值失败！");
                 System.out.println("Fail，充值失败！");
                 throwables.printStackTrace();
-                response.setStatus(204);
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
                 try {
@@ -101,14 +102,15 @@ public class MoneyApi extends HttpServlet {
             String rm = "delete from record where id = \"" + id + "\"";
             try {
                 if (stmt.executeUpdate(rm) == 0) {
+                    response.setStatus(202);
                     o.write("Fail，删除失败！");
                     System.out.println("Fail，删除失败！" + rm);
-                    response.setStatus(202);
                 } else {
                     con.commit();
+                    response.setStatus(200);
+                    o.write("OK，删除成功！");
                     System.out.println("OK，删除成功！" + rm);
                     System.out.println(rm);
-                    o.write("OK，删除成功！");
                 }
             } catch (SQLException throwables) {
                 try {
@@ -117,10 +119,10 @@ public class MoneyApi extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                response.setStatus(204);
                 o.write("Fail，删除失败！");
                 System.out.println("Fail，删除失败！" + rm);
                 throwables.printStackTrace();
-                response.setStatus(204);
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
                 try {
@@ -205,25 +207,25 @@ public class MoneyApi extends HttpServlet {
                         "(\'" + method + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\',\'" + smoney + "\')";
 
                 if (rid == null) {
+                    response.setStatus(205);
                     o.write("Fail，用户ID不存在！");
                     System.out.println("Fail，用户ID不存在！" + f);
-                    response.setStatus(205);
                 } else if (umoney < smoney) {
+                    response.setStatus(206);
                     o.write("Fail，用户余额不足！");
                     System.out.println("Fail，用户余额不足！");
-                    response.setStatus(206);
                 } else if (stmt.executeUpdate(p) == 0) {
+                    response.setStatus(207);
                     o.write("Fail，用户扣款失败！");
                     System.out.println("Fail，用户扣款失败！" + p);
-                    response.setStatus(207);
                 } else if (stmt.executeUpdate(a) == 0) {
+                    response.setStatus(202);
                     o.write("Fail，修改服务次数失败！");
                     System.out.println("Fail，修改服务次数失败！" + a);
-                    response.setStatus(202);
                 } else if (stmt.executeUpdate(m) == 0) {
+                    response.setStatus(202);
                     o.write("Fail，插入失败！");
                     System.out.println("Fail，插入用户名密码失败！" + m);
-                    response.setStatus(202);
                 } else {
 
                     //增加员工绩效
@@ -239,9 +241,10 @@ public class MoneyApi extends HttpServlet {
 
                     //没问题的话才提交数据库查询
                     con.commit();
+                    response.setStatus(200);
+                    o.write("OK，新增物业费记录成功！");
                     System.out.println("OK，新增物业费记录成功！" + sid);
                     System.out.println(a);
-                    o.write("OK，新增物业费记录成功！");
                 }
 
             } catch (SQLException throwables) {
@@ -251,10 +254,10 @@ public class MoneyApi extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                response.setStatus(204);
                 o.write("Fail，插入失败！");
                 System.out.println("Fail，插入物业费记录失败！");
                 throwables.printStackTrace();
-                response.setStatus(204);
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
                 try {
@@ -323,6 +326,7 @@ public class MoneyApi extends HttpServlet {
                 recordsJson.add(records);
             }
             //字符串输出json内容
+            response.setStatus(200);
             o.write(recordsJson.toJSONString());
             //断开数据库连接
             rs.close();

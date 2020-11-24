@@ -23,10 +23,6 @@ public class ServiceManage extends HttpServlet {
         httpUtils.httpUtil(request,response);
         //定义输出对象
         Writer o = response.getWriter();
-        //新的数据工具类对象
-        dbUtils db = new dbUtils();
-        //创建stmt类
-        Statement stmt = db.getStatement();
 
         String method = request.getParameter("method");
         String sid = request.getParameter("sid");
@@ -44,12 +40,17 @@ public class ServiceManage extends HttpServlet {
                     "where service.sid = \"" + sid + "\"";
 
             System.out.println(d);
+            //新的数据工具类对象
+            dbUtils db = new dbUtils();
+            //创建stmt类
+            Statement stmt = db.getStatement();
             try {
                 if (stmt.executeUpdate(d) == 0) {
                     o.write("Fail，删除失败！");
                     System.out.println("Fail，删除失败！" + d);
                     response.setStatus(202);
                 } else {
+                    response.setStatus(200);
                     System.out.println("OK，删除成功！" + sid);
                     System.out.println(d);
                     o.write("OK，删除成功！");
@@ -65,6 +66,10 @@ public class ServiceManage extends HttpServlet {
                 db.closeConnect();
             }
         } else {
+            //新的数据工具类对象
+            dbUtils db = new dbUtils();
+            //创建stmt类
+            Statement stmt = db.getStatement();
             //反之则添加服务
             String s = "INSERT INTO service" +
                     "(sid,sname,sprice,sdesc,stime)" +
@@ -76,6 +81,7 @@ public class ServiceManage extends HttpServlet {
                     System.out.println("Fail，插入用户信息失败！" + s);
                     response.setStatus(202);
                 } else {
+                    response.setStatus(200);
                     System.out.println("OK，新增成功！" + sid);
                     System.out.println(s);
                     o.write("OK，新增成功！");
@@ -102,15 +108,13 @@ public class ServiceManage extends HttpServlet {
         Writer o = response.getWriter();
 
 
-        //新的数据工具类对象
-        dbUtils db = new dbUtils();
-        //创建stmt类
-
         String want = request.getParameter("want");
         try {
             if (want == null) {
                 o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
             } else if (want.equals("sid")) {
+                //新的数据工具类对象
+                dbUtils db = new dbUtils();
                 Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
@@ -130,12 +134,16 @@ public class ServiceManage extends HttpServlet {
                 //使用alibaba的fastjson建立一个json对象
                 JSONArray newidJson = new JSONArray();
                 newidJson.add(newid);
+                response.setStatus(200);
                 //输出json
                 o.write(newidJson.toJSONString());
                 //断开数据库连接
                 rs.close();
                 System.out.println("输出新物业服务ID成功");
+                db.closeConnect();
             } else if (want.equals("slist")) {
+                //新的数据工具类对象
+                dbUtils db = new dbUtils();
                 Statement stmt = db.getStatement();
                 //result接口
                 ResultSet rs;
@@ -163,18 +171,20 @@ public class ServiceManage extends HttpServlet {
                     //把hashmap对象添加到json数组中
                     serviceJson.add(serviceList);
                 }
+                response.setStatus(200);
                 //输出json
                 o.write(serviceJson.toJSONString());
                 //断开数据库连接
                 rs.close();
                 System.out.println("输出物业服务列表成功");
+                db.closeConnect();
             }
 
         } catch (Exception throwables) {
             throwables.printStackTrace();
         } finally {
             //使用定义的工具类一键断开con和stmt连接
-            db.closeConnect();
+            // db.closeConnect();
         }
     }
 }

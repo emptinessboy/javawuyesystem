@@ -99,7 +99,7 @@ public class LoginApi extends HttpServlet {
 
                         JSONArray successJson = new JSONArray();
                         successJson.add(value);
-
+                        response.setStatus(200);
                         o.write(successJson.toJSONString());
 
                     }else {
