@@ -61,7 +61,7 @@ public class ShowData extends HttpServlet {
                 String count_allsmoney = rs.getString(2);
                 //添加到哈希表
                 count.put("count_allstimes", count_allstimes);
-                count.put("ccount_allsmoney", count_allsmoney);
+                count.put("count_allsmoney", count_allsmoney);
                 //把hashmap对象添加到json数组中
                 showJson.add(count);
                 System.out.println("总服务次数和总流水统计完毕");
@@ -105,35 +105,35 @@ public class ShowData extends HttpServlet {
             rs.beforeFirst();
 
             //建立输出的哈希表 这里哈希表的格式和之前不太一样了。使用字符串数组了
-            HashMap<String, long[]> money = new HashMap<>();
+            HashMap<String, long[]> allmoney = new HashMap<>();
             long pay[] = {0, 0, 0, 0, 0, 0, 0};
             long income[] = {0, 0, 0, 0, 0, 0, 0};
-//            while (rs.next()) {
-//                //创建用户信息哈希表
-//
-//                String date = rs.getString(1).substring(0, 10);
-//                String method = rs.getString(2);
-//                String money = rs.getString(3);
-//
-//
-//                String count_allstimes = rs.getString(1);
-//                String count_allsmoney = rs.getString(2);
-//                //添加到哈希表
-//                count.put("count_allstimes", count_allstimes);
-//                count.put("ccount_allsmoney", count_allsmoney);
-//                //把hashmap对象添加到json数组中
-//                showJson.add(count);
-//                System.out.println("总服务次数和总流水统计完毕");
-//            }
+            while (rs.next()) {
+                //创建用户信息哈希表
 
-//            rs.beforeFirst();
-            //金额统计数组写入哈希表
-            money.put("pay", pay);
-            money.put("income", income);
+                String date = rs.getString(1).substring(0, 10);
+                String method = rs.getString(2);
+                Long money = rs.getLong(3);
+                //使用一个循环，将所有数据统计到数组 pay 和 income 中
+                for (int i = 0; i < 7; i++) {
+                    if (date.equals(days[i])) {
+                        if (method.equals("pay")) {
+                            pay[i] += money;
+                        } else {
+                            income[i] += money;
+                        }
+                    }
+                }
 
+            }
             rs.close();
-            showJson.add(out);
+            //金额统计数组写入哈希表
+            allmoney.put("pay", pay);
+            allmoney.put("income", income);
 
+            //把流水统计的三个哈希表写入json
+            showJson.add(out);
+            showJson.add(allmoney);
 
             //字符串输出json内容
             response.setStatus(200);
