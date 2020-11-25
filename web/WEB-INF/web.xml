@@ -47,6 +47,14 @@
         <servlet-name>LoginApi</servlet-name>
         <servlet-class>com.huxiaofan.api.LoginApi</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ShowData</servlet-name>
+        <servlet-class>com.huxiaofan.api.ShowData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowData</servlet-name>
+        <url-pattern>/api/show</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginApi</servlet-name>
         <url-pattern>/api/login</url-pattern>
