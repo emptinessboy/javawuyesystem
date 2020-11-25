@@ -67,6 +67,16 @@
         <servlet-name>LogoutApi</servlet-name>
         <url-pattern>/api/logout</url-pattern>
     </servlet-mapping>
+    <!--用户类-->
+    <servlet>
+        <servlet-name>UserApi</servlet-name>
+        <servlet-class>com.huxiaofan.api.UserApi</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserApi</servlet-name>
+        <url-pattern>/api/user</url-pattern>
+    </servlet-mapping>
+    <!--用户类-->
     <!--测试类-->
     <servlet>
         <servlet-name>testSession</servlet-name>
