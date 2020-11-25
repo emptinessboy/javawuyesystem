@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class UserApi extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //此方法用来添加和删除服务
+        //此方法用来订购物业服务
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
         //定义输出对象
