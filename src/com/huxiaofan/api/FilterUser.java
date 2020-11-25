@@ -2,16 +2,14 @@ package com.huxiaofan.api;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.FileStore;
 import java.util.Enumeration;
 
-@WebFilter(filterName = "FilterAuth")
-public class FilterAuth implements Filter {
+@WebFilter(filterName = "FilterUser")
+public class FilterUser implements Filter {
 
     ServletContext context = null;
 
@@ -28,8 +26,8 @@ public class FilterAuth implements Filter {
                 return;
             } else {
                 try {
-                    if (hs.getAttribute("eid") == null) {
-                        loginErr((HttpServletResponse) resp, "普通用户禁止访问！");
+                    if (hs.getAttribute("cno") == null) {
+                        loginErr((HttpServletResponse) resp, "需要普通用户登录访问！");
                         return;
                     }
                     //获取session中所有的键值对
@@ -74,7 +72,6 @@ public class FilterAuth implements Filter {
             response.setStatus(405);
             Writer o = response.getWriter();
             o.write("Faild！" + message);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
