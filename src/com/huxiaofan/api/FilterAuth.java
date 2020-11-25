@@ -26,6 +26,9 @@ public class FilterAuth implements Filter {
             if (hs == null) {
                 loginErr((HttpServletResponse) resp, "无效的令牌！");
                 return;
+            } else if (hs.getAttribute("eid") == null) {
+                loginErr((HttpServletResponse) resp, "普通用户禁止访问！");
+                return;
             } else {
                 try {
                     //获取session中所有的键值对

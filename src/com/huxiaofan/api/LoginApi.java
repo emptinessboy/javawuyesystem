@@ -62,8 +62,8 @@ public class LoginApi extends HttpServlet {
                 rs.close();
                 db.closeConnect();
 
-                if (eid != null && eid.equals(u)){
-                    if (epass != null && epass.equals(p)){
+                if (eid != null && eid.equals(u)) {
+                    if (epass != null && epass.equals(p)) {
                         //到这里为止是认证成功的情况
 
                         //获取session
@@ -77,38 +77,38 @@ public class LoginApi extends HttpServlet {
 
                         //System.out.println(sec);
                         String token = newMD5(String.valueOf(sec));
-                        System.out.println("随机token生成完毕： "+token);
+                        System.out.println("随机token生成完毕： " + token);
 
                         //把用户信息写入session
-                        hs.setAttribute("isadmin",isadmin);
-                        hs.setAttribute("eid",eid);
-                        hs.setAttribute("ename",ename);
+                        hs.setAttribute("isadmin", isadmin);
+                        hs.setAttribute("eid", eid);
+                        hs.setAttribute("ename", ename);
                         //设置session过期时间半小时
                         hs.setMaxInactiveInterval(1800);
                         //将token和对应的session存到Attribute中供所有servlet访问
                         getServletContext().setAttribute(token, hs);
-                        System.out.println("认证成功，token和session已保存到服务端");
+                        System.out.println("员工认证成功，token和session已保存到服务端");
 
                         //向客户端返回 JSON 用户名，ID，和是否管理员
                         HashMap<String, String> value = new HashMap<String, String>();
-                        value.put("eid",eid);
-                        value.put("ename",ename);
-                        value.put("isadmin",isadmin);
+                        value.put("eid", eid);
+                        value.put("ename", ename);
+                        value.put("isadmin", isadmin);
 
-                        value.put("token",token);
+                        value.put("token", token);
 
                         JSONArray successJson = new JSONArray();
                         successJson.add(value);
                         response.setStatus(200);
                         o.write(successJson.toJSONString());
 
-                    }else {
-                        System.out.println("用户名密码错误！");
-                        loginErr(response,"用户名密码错误！");
+                    } else {
+                        System.out.println("员工用户名密码错误！");
+                        loginErr(response, "员工用户名密码错误！");
                     }
-                }else {
+                } else {
                     System.out.println("参数错误！");
-                    loginErr(response,"参数错误");
+                    loginErr(response, "参数错误");
                 }
 
 
@@ -118,8 +118,80 @@ public class LoginApi extends HttpServlet {
 
 
         } else {
+            //普通用户登录
+            // 这里使用了leftjoin多表联合查询;
+            String sql = "SELECT members.cno,cname,cpass from members " +
+                    "LEFT JOIN mpass ON members.cno=mpass.cno " +
+                    "where members.cno = \"" + u + "\"";
+
+            try {
+                ResultSet rs = stmt.executeQuery(sql);
+                rs.beforeFirst();
+
+                String cno = null;
+                String cname = null;
+                String cpass = null;
+
+                while (rs.next()) {
+                    cno = rs.getString(1);
+                    cname = rs.getString(2);
+                    cpass = rs.getString(3);
+                }
+                //断开数据库连接
+                rs.close();
+                db.closeConnect();
+
+                if (cno != null && cno.equals(u)) {
+                    if (cpass != null && cpass.equals(p)) {
+                        //到这里为止是认证成功的情况
+
+                        //获取session
+                        HttpSession hs = request.getSession(true);
+
+                        //md5加时间戳生成一个随机token
+                        Date d = new Date();
+                        double rd = Math.random();
+
+                        String sec = String.valueOf(rd) + d.getTime();
+
+                        //System.out.println(sec);
+                        String token = newMD5(String.valueOf(sec));
+                        System.out.println("随机token生成完毕： " + token);
+
+                        //把用户信息写入session
+                        hs.setAttribute("cno", cno);
+                        hs.setAttribute("cname", cname);
+                        //设置session过期时间半小时
+                        hs.setMaxInactiveInterval(1800);
+                        //将token和对应的session存到Attribute中供所有servlet访问
+                        getServletContext().setAttribute(token, hs);
+                        System.out.println("普通用户认证成功，token和session已保存到服务端");
+
+                        //向客户端返回 JSON 用户名，ID，和是否管理员
+                        HashMap<String, String> value = new HashMap<String, String>();
+                        value.put("cno", cno);
+                        value.put("cname", cname);
+
+                        value.put("token", token);
+
+                        JSONArray successJson = new JSONArray();
+                        successJson.add(value);
+                        response.setStatus(200);
+                        o.write(successJson.toJSONString());
+
+                    } else {
+                        System.out.println("普通用户名密码错误！");
+                        loginErr(response, "普通用户名密码错误！");
+                    }
+                } else {
+                    System.out.println("参数错误！");
+                    loginErr(response, "参数错误");
+                }
 
 
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
     }
@@ -128,11 +200,11 @@ public class LoginApi extends HttpServlet {
         this.doPost(request, response);
     }
 
-    public static void loginErr(HttpServletResponse response,String message){
+    public static void loginErr(HttpServletResponse response, String message) {
         try {
             response.setStatus(401);
             Writer o = response.getWriter();
-            o.write("Faild！"+  message);
+            o.write("Faild！" + message);
 
         } catch (IOException e) {
             e.printStackTrace();

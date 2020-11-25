@@ -101,4 +101,8 @@
         <filter-name>FilterAuth</filter-name>
         <servlet-name>StaffManage</servlet-name>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterAuth</filter-name>
+        <servlet-name>ShowData</servlet-name>
+    </filter-mapping>
 </web-app>
