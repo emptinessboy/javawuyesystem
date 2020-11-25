@@ -56,12 +56,11 @@ public class UserApi extends HttpServlet {
                 rs.last();
                 int sum = rs.getRow();
                 rs.close();
-                if (sum > 0){
+                if (sum > 0) {
                     o.write("还有尚未处理的订单，订购失败！");
                     System.out.println("还有尚未处理的订单，订购失败！" + d);
                     response.setStatus(203);
-                }
-                else if (stmt.executeUpdate(s) == 0) {
+                } else if (stmt.executeUpdate(s) == 0) {
                     o.write("Fail，订购失败！");
                     System.out.println("Fail，订购失败！" + d);
                     response.setStatus(202);
@@ -81,9 +80,7 @@ public class UserApi extends HttpServlet {
                 //使用定义的工具类一键断开con和stmt连接
                 db.closeConnect();
             }
-
         }
-
 
     }
 
@@ -91,14 +88,41 @@ public class UserApi extends HttpServlet {
         //此接口用于新生成服务ID和查看服务列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
         Writer o = response.getWriter();
-
 
         String want = request.getParameter("want");
         try {
             if (want == null) {
-                o.write("此接口需要参数，详情仔细管理员 晓帆 i@my.huxiaofan.com");
+                //此接口输出物业费余额
+                //新的数据工具类对象
+                dbUtils db = new dbUtils();
+                Statement stmt = db.getStatement();
+                //result接口
+                ResultSet rs;
+                String token = request.getParameter("token");
+                HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
+                String cno = (String) hs.getAttribute("cno");
+                String s = "SELECT cmoney FROM members WHERE cno=" + cno;
+                System.out.println(s);
+                rs = stmt.executeQuery(s);
+                rs.beforeFirst();
+                //使用alibaba的fastjson建立一个json对象
+                JSONArray serviceJson = new JSONArray();
+                while (rs.next()) {
+                    //创建服务列表信息哈希表
+                    HashMap<String, String> serviceList = new HashMap<String, String>();
+                    String cmoney = rs.getString(1);
+                    serviceList.put("cmoney", cmoney);
+                    //把hashmap对象添加到json数组中
+                    serviceJson.add(serviceList);
+                }
+                //断开数据库连接
+                rs.close();
+                response.setStatus(200);
+                //输出json
+                o.write(serviceJson.toJSONString());
+                System.out.println("输出用户余额列表成功");
+                db.closeConnect();
             } else if (want.equals("order")) {
                 //新的数据工具类对象
                 dbUtils db = new dbUtils();
@@ -108,7 +132,7 @@ public class UserApi extends HttpServlet {
                 String token = request.getParameter("token");
                 HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
                 String cno = (String) hs.getAttribute("cno");
-                String s = "SELECT orders.sid,orders.date,service.sname FROM orders LEFT JOIN service ON orders.sid=service.sid WHERE cno=" + cno;
+                String s = "SELECT orders.sid,orders.date,service.sname,orders.status FROM orders LEFT JOIN service ON orders.sid=service.sid WHERE cno=" + cno;
                 System.out.println(s);
                 rs = stmt.executeQuery(s);
                 rs.beforeFirst();
@@ -122,11 +146,12 @@ public class UserApi extends HttpServlet {
                     String date = rs.getString(2);
                     String sname = "未命名";
                     sname = rs.getNString(3);
-
+                    String status = rs.getString(4);
 
                     serviceList.put("sid", sid);
                     serviceList.put("sname", sname);
                     serviceList.put("date", date);
+                    serviceList.put("status", status);
 
                     //把hashmap对象添加到json数组中
                     serviceJson.add(serviceList);
