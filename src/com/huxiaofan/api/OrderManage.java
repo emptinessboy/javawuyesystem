@@ -156,7 +156,7 @@ public class OrderManage extends HttpServlet {
                 String a = "INSERT INTO record" +
                         "(method,cno,sid,date,times,staff,money)" +
                         "VALUES" +
-                        "(\'" + method + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\',\'" + smoney + "\')";
+                        "(\'" + "pay" + "\',\'" + cno + "\',\'" + sid + "\',\'" + date + "\',\'" + times + "\',\'" + staff + "\',\'" + smoney + "\')";
 
                 //删除对应工单
                 String delorder = "DELETE orders FROM orders WHERE cno=" + cno;
