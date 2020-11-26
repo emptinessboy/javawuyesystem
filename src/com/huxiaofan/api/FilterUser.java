@@ -67,6 +67,7 @@ public class FilterUser implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
         response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Author", "huxiaofan");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,Authorization,ybg,token");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         try {
