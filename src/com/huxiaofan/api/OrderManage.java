@@ -35,7 +35,8 @@ public class OrderManage extends HttpServlet {
 
         if (method.equals("accept")) {
 
-            String ac = "update orders set status=\"" + "2" + "\", staff=\"" + staff + "\" where id=\"" + id + "\"";
+            // and staff is NULL来防止抢单导致的重复查询
+            String ac = "update orders set status=\"" + "2" + "\", staff=\"" + staff + "\" where id=\"" + id + "\" and staff is NULL";
 
             System.out.println(ac);
             //新的数据工具类对象
