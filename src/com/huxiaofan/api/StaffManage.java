@@ -22,7 +22,7 @@ public class StaffManage extends HttpServlet {
 
         String token = request.getParameter("token");
         HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
-        Boolean isAdmin = (Boolean) hs.getAttribute("isadmin");
+        String isAdmin = (String) hs.getAttribute("isadmin");
 
         //此方法用来添加和删除服务
         //封装的http请求响应头
@@ -35,7 +35,7 @@ public class StaffManage extends HttpServlet {
         String eid = request.getParameter("id");
 
         //判断不是管理员的情况
-        if (!isAdmin){
+        if (!isAdmin.equals("1")){
             response.setStatus(401);
             o.write("亲爱的打工人，您没有权限！");
         }
