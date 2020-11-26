@@ -74,6 +74,7 @@ public class ShowData extends HttpServlet {
             System.out.println("当前时间为：" + sdf.format(d.getTime()));
             //统计图表第七天的时间戳
             Long d7 = d.getTime();
+            Long d8 = d7 + 24 * 60 * 60 * 1000;
             //根据第七天时间戳计算每天的时间戳
             Long d6 = d7 - 24 * 60 * 60 * 1000;
             Long d5 = d6 - 24 * 60 * 60 * 1000;
@@ -83,6 +84,7 @@ public class ShowData extends HttpServlet {
             Long d1 = d2 - 24 * 60 * 60 * 1000;
             System.out.println("7天前的时间为：" + sdf.format(d1));
             //格式化时间字符串
+            String day8 = sdf.format(d8).substring(0, 10);
             String day7 = sdf.format(d7).substring(0, 10);
             String day6 = sdf.format(d6).substring(0, 10);
             String day5 = sdf.format(d5).substring(0, 10);
@@ -92,14 +94,19 @@ public class ShowData extends HttpServlet {
             String day1 = sdf.format(d1).substring(0, 10);
             //组合日期数组
             String days[] = {day1, day2, day3, day4, day5, day6, day7};
+            //System.out.println(day1+day8);
             //建立输出的哈希表 这里哈希表的格式和之前不太一样了。使用字符串数组了
             HashMap<String, String[]> out = new HashMap<>();
             out.put("days", days);
             //数据库查询时间 方法 钱
+            //sql between包括两端吗
+            //与字段类型有关
+            //数据库类型如果是data 则包括两端
+            //如果是datatime 则不包括右边
             String cx = "SELECT date,method,money FROM record WHERE record.date BETWEEN '" +
                     day1 +
                     "' AND '" +
-                    day7 + "'";
+                    day8 + "'";
             System.out.println(cx);
             rs = stmt.executeQuery(cx);
             rs.beforeFirst();
@@ -114,7 +121,8 @@ public class ShowData extends HttpServlet {
                 String date = rs.getString(1).substring(0, 10);
                 String method = rs.getString(2);
                 Long money = rs.getLong(3);
-                //使用一个循环，将所有数据统计到数组 pay 和 income 中
+                // System.out.println(date+method+money);
+                // 使用一个循环，将所有数据统计到数组 pay 和 income 中
                 for (int i = 0; i < 7; i++) {
                     if (date.equals(days[i])) {
                         if (method.equals("pay")) {
