@@ -223,8 +223,8 @@ public class UserApi extends HttpServlet {
                     e.printStackTrace();
                 }
                 response.setStatus(204);
-                o.write("Fail，插入失败！");
-                System.out.println("Fail，插入物业费记录失败！");
+                o.write("Fail，结单失败！");
+                System.out.println("Fail，结单失败！");
                 throwables.printStackTrace();
             } finally {
                 //使用定义的工具类一键断开con和stmt连接
