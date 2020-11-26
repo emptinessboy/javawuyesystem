@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.ResultSet;
@@ -16,7 +17,13 @@ import java.util.HashMap;
 
 @WebServlet(name = "StaffManage")
 public class StaffManage extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String token = request.getParameter("token");
+        HttpSession hs = (HttpSession) getServletContext().getAttribute(token);
+        Boolean isAdmin = (Boolean) hs.getAttribute("isadmin");
+
         //此方法用来添加和删除服务
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
@@ -26,7 +33,12 @@ public class StaffManage extends HttpServlet {
         String method = request.getParameter("method");
         String eid = request.getParameter("id");
 
-        if (method.equals("delete")) {
+        //判断不是管理员的情况
+        if (!isAdmin){
+            response.setStatus(401);
+            o.write("亲爱的打工人，您没有权限！");
+        }
+        else if (method.equals("delete")) {
             //新的数据工具类对象
             dbUtils db = new dbUtils();
             //创建stmt类
