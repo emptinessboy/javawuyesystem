@@ -13,7 +13,7 @@ public class httpUtils {
         }
         response.setContentType("application/json; charset=utf-8");
         //允许跨域请求
-        //response.setHeader("Access-Control-Allow-Origin", "*"); //  这里最好明确的写允许的域名
+        //response.setHeader("Access-Control-Allow-Origin", "*"); // 这里最好明确的写允许的域名
         response.setHeader("Access-Control-Allow-Origin", "https://wyglxt.app.huxiaofan.com"); //  这里最好明确的写允许的域名
         //response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081"); //  这里最好明确的写允许的域名
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
