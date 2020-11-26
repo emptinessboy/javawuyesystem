@@ -19,6 +19,7 @@ import java.util.HashMap;
 @WebServlet(name = "ShowData")
 public class ShowData extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         doGet(request, response);
     }
 
@@ -26,7 +27,7 @@ public class ShowData extends HttpServlet {
         //此接口返回统计信息
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
         dbUtils db = new dbUtils();

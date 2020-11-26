@@ -24,7 +24,7 @@ public class AddMembers extends HttpServlet {
         //此方法用于添加用户
         //封装的http请求响应头
         httpUtils.httpUtil(request,response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -93,7 +93,7 @@ public class AddMembers extends HttpServlet {
         //这个方法就可以返回一个新的用户ID(大于目前任何已有的用户ID)
         //封装的http请求响应头
         httpUtils.httpUtil(request,response);
-
+        request.setCharacterEncoding("utf-8");
         Writer o = response.getWriter();
 
         //result接口

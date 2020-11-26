@@ -24,6 +24,7 @@ public class OrderManage extends HttpServlet {
         //此方法用来接受和结束工单
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -235,7 +236,7 @@ public class OrderManage extends HttpServlet {
         //此接口返回工单列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
         dbUtils db = new dbUtils();

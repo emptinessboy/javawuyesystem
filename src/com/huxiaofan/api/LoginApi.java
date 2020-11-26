@@ -25,7 +25,7 @@ public class LoginApi extends HttpServlet {
         //此接口用于新生成服务ID和查看服务列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         Writer o = response.getWriter();
 
         //新的数据工具类对象
@@ -197,6 +197,7 @@ public class LoginApi extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         this.doPost(request, response);
     }
 

@@ -27,6 +27,7 @@ public class StaffManage extends HttpServlet {
         //此方法用来添加和删除服务
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -124,6 +125,7 @@ public class StaffManage extends HttpServlet {
         //封装的http请求响应头
 
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         Writer o = response.getWriter();
         String want = request.getParameter("want");
 

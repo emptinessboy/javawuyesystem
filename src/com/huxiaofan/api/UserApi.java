@@ -27,6 +27,7 @@ public class UserApi extends HttpServlet {
         //此方法用来订购物业服务
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -244,6 +245,7 @@ public class UserApi extends HttpServlet {
         //此接口用于新生成服务ID和查看服务列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         Writer o = response.getWriter();
 
         String want = request.getParameter("want");

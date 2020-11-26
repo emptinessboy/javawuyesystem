@@ -13,13 +13,14 @@ import java.util.Enumeration;
 @WebServlet(name = "LogoutApi")
 public class LogoutApi extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 

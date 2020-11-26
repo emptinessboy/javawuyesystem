@@ -24,6 +24,7 @@ public class MoneyApi extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -276,7 +277,7 @@ public class MoneyApi extends HttpServlet {
         //此接口返回物业费记录列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
         //result接口

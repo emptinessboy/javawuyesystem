@@ -25,7 +25,7 @@ public class ListMembers extends HttpServlet {
         //此api用于删除和修改用户
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
 
@@ -116,7 +116,7 @@ public class ListMembers extends HttpServlet {
         //此接口返回用户列表
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         //定义输出对象
         Writer o = response.getWriter();
         dbUtils db = new dbUtils();

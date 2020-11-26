@@ -14,6 +14,7 @@ import java.util.HashMap;
 @WebServlet(name = "testSession")
 public class testSession extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         doGet(request,response);
     }
 
@@ -21,7 +22,7 @@ public class testSession extends HttpServlet {
 
         //封装的http请求响应头
         httpUtils.httpUtil(request, response);
-
+        request.setCharacterEncoding("utf-8");
         Writer o = response.getWriter();
 
         String FileName="";
