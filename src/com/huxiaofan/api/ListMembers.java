@@ -73,8 +73,8 @@ public class ListMembers extends HttpServlet {
             //因为前端来的数据形如 cregtime="1986-01-07T16:00:00.000Z"需要对其进行处理
             String cregtime = request.getParameter("row[cregtime]").substring(0, 19);
             String csex = request.getParameter("row[csex]");
-
-            System.out.println("取得的参数为：" + cno + " " + cname + " " + caddress + " " + cregtime + " " + csex);
+            String cphone = request.getParameter("row[cphone]");
+            System.out.println("取得的参数为：" + cno + " " + cname + " " + caddress + " " + cregtime + " " + csex + " " + cphone);
             //用于sql出错分析
             // String m = "update members set cname=\"" + cname + "\", csex=\"" + csex + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\" where cno=\"" + cno + "\"";
 
@@ -88,7 +88,7 @@ public class ListMembers extends HttpServlet {
                 //时间对象转字符串
                 cregtime = sdf.format(d);
                 //sql语句拼接
-                String m = "update members set cname=\"" + cname + "\", csex=\"" + csex + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\" where cno=\"" + cno + "\"";
+                String m = "update members set cname=\"" + cname + "\", csex=\"" + csex + "\", caddress=\"" + caddress + "\", cregtime=\"" + cregtime + "\", cphone=\"" + cphone + "\" where cno=\"" + cno + "\"";
                 System.out.println(m);
                 //打印行数
                 int count = stmt.executeUpdate(m);
@@ -138,12 +138,14 @@ public class ListMembers extends HttpServlet {
                 String caddress = rs.getString(4);
                 String cregtime = rs.getString(5);
                 String cmoney = rs.getString(6);
+                String cphone = rs.getString(7);
                 members.put("cno", cno);
                 members.put("cname", cname);
                 members.put("csex", csex);
                 members.put("caddress", caddress);
                 members.put("cregtime", cregtime);
                 members.put("cmoney", cmoney);
+                members.put("cphone", cphone);
                 //把hashmap对象添加到json数组中
                 membersJson.add(members);
             }

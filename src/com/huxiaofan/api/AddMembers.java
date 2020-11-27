@@ -37,6 +37,7 @@ public class AddMembers extends HttpServlet {
         String cname = request.getParameter("name");
         String csex = request.getParameter("sex");
         String cmoney = request.getParameter("money");
+        String phone = request.getParameter("phone");
         String caddress = request.getParameter("address");
         String cregtime = request.getParameter("date").substring(0, 19);
         String cpass = request.getParameter("pass");
@@ -52,12 +53,12 @@ public class AddMembers extends HttpServlet {
         //System.out.println(d);
         //时间对象转字符串
         cregtime = sdf.format(d);
-        System.out.println(cno + " " + cname + " " + csex + " " + cmoney + " " + caddress + " " + cregtime + " " + cpass);
+        System.out.println(cno + " " + cname + " " + csex + " " + cmoney + " " + phone + " "+ caddress + " " + cregtime + " " + cpass);
 
         String a1 = "INSERT INTO members" +
-                "(cno,cname,csex,cmoney,caddress,cregtime)" +
+                "(cno,cname,csex,cmoney,caddress,cregtime,cphone)" +
                 "VALUES" +
-                "(\'" + cno + "\',\'" + cname + "\',\'" + csex + "\',\'" + cmoney + "\',\'" + caddress + "\',\'" + cregtime + "\')";
+                "(\'" + cno + "\',\'" + cname + "\',\'" + csex + "\',\'" + cmoney + "\',\'" + caddress + "\',\'" + cregtime + "\',\'" + phone + "\')";
 
         String a2 = "INSERT INTO mpass" +
                 "(cno,cpass)" +
