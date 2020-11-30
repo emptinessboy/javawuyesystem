@@ -28,4 +28,16 @@
 
 访问路径 /api/orders
 
+- GET方法：不需要参数。获得JSON格式的输出
+- 返回实例如下
+
+`[{date: "2020-11-29 22:42:47", cno: "10000", id: "19", sid: "4", status: "1"}]
+0: {date: "2020-11-29 22:42:47", cno: "10000", id: "19", sid: "4", status: "1"}`
+
+- POST方法：参数（method[accept],id[员工ID]）
+- 返回状态 200 / 201-204 内部错误 / 401 认证错误
+
+### OrderManage 接口
+
+访问路径 /api/orders
 
