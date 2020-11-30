@@ -85,6 +85,6 @@
 
 参数（method[delete],sid[服务ID]）。请求后删除对应的服务。
 
-参数（method[空],sid[服务ID],name[服务名称],price[服务价格],desc[服务介绍]）
+参数（method[空],sid[服务ID],name[服务名称],price[服务价格],desc[服务介绍]）。请求后添加对应的服务。
 
 - 返回状态 200 / 201-204 内部错误 / 401 认证错误
