@@ -81,5 +81,10 @@
 
 `[{"sname":"楼道清理","sdesc":"帮助业主清理单元楼楼道卫生保洁","stime":"12","sprice":"50.0","sid":"1"},{"sname":"上门开锁","sdesc":"专业的开人员，帮助业主开锁。（本服务需要业主实名登记）","stime":"4","sprice":"200.0","sid":"2"}]`
 
-- POST方法：参数（id[用户ID]],name[用户姓名],sex[用户性别],money[余额],phone[用户电话],address[用户住址],date[入住时间],pass[用户密码]）
+- POST方法：
+
+参数（method[delete],sid[服务ID]）。请求后删除对应的服务。
+
+参数（method[空],sid[服务ID],name[服务名称],price[服务价格],desc[服务介绍]）
+
 - 返回状态 200 / 201-204 内部错误 / 401 认证错误
