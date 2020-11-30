@@ -8,7 +8,7 @@
 
 该项目使用了响应式设计，采用了完全的前后端分离。
 
-前端使用了vue+element，后端使用Java语言写的Servlet，数据库使用的MySQL8。实现了用户记住登录，区分管理员和普通用户登录，权限管理，物业服务管理，在线结算等功能。
+前端使用了vue+element，后端使用Java语言写的Servlet，数据库使用的MySQL8。实现了用户记住登录，区分管理员和普通用户登录，权限管理，物业服务管理，在线结算等功能。并使用了MySQL的事务特性，语句出错后自动回滚。
 
 演示地址：https://wyglxt.app.huxiaofan.com
 
@@ -16,7 +16,7 @@
 
 后端部分：JAVA Servlet，FastJSON，MYSQL 8
 
-运行环境： Tomcat 9.39
+运行环境： Tomcat 9.39， JDK 1.8+
 
 ## 接口信息
 
@@ -54,5 +54,5 @@
 
 参数（method[modify],row[cno][客户ID],row[cname][用户姓名],row[caddress][用户住址],row[cregtime][注册时间],row[csex][用户性别],row[cphone][用户电话号码]）
 
-返回状态 200 / 201-204 内部错误 / 401 认证错误
+- 返回状态 200 / 201-204 内部错误 / 401 认证错误
 
