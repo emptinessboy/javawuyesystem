@@ -18,6 +18,12 @@
 
 运行环境： Tomcat 9.39， JDK 1.8+
 
+## 数据库使用
+
+/web/WEB-INF/sql 下有默认的 sql 导出文件
+
+导入数据库名等信息请在 dbUtils.java 和 MySQL.java 中修改配置
+
 ## 接口信息
 
 > 本后端接受普通的地址形式参数 parameter ，返回格式为 application/json。使用 axios 请求接口时需要进行 qs 转换，并携带 token。
